@@ -41,10 +41,8 @@
         name=""
         v-model="contrasena"
       />
-      <div v-if="error" class="mx-auto">
-        <p class="text-center text-red-600">
-          Correo o contraseña mal introducidos
-        </p>
+      <div v-if="error">
+        <p v-text="errormessage" class="text-center text-red-600" />
       </div>
       <button
         class="block bg-black text-white mt-5 px-2 py-2 rounded-md"
@@ -54,8 +52,8 @@
         Iniciar sesión
       </button>
       <p class="text-center">
-        ¿No estás registrado?<a class="p-1" href="#" @click="registro = true"
-          >Regístrate</a
+        ¿No estás registrado?<span class="p-1" href="#" @click="registro = true"
+          >Regístrate</span
         >
       </p>
     </form>
@@ -86,6 +84,7 @@
         type="password"
         name=""
         v-model="repite"
+        @keyup="comprobar()"
       />
       <div v-if="error" class="mx-auto">
         <p class="text-center text-red-600">Las contraseñas no coinciden</p>
@@ -94,18 +93,16 @@
         class="block bg-black text-white mt-5 px-2 py-2 rounded-md"
         type="submit"
         value=""
+        id="btn_registro"
       >
         Registrarse
       </button>
       <p class="text-center">
-        ¿Tienes cuenta?<a class="p-1" href="#" @click="registro = false"
-          >Inicia sesión</a
+        ¿Tienes cuenta?<span class="p-1" @click="registro = false"
+          >Inicia sesión</span
         >
       </p>
     </form>
-    <pre>
-      {{ $data }}
-    </pre>
   </div>
 </template>
 
@@ -114,10 +111,15 @@
 <script>
 import firebase from "firebase";
 export default {
+  created() {
+    if(firebase.auth().currentUser)
+      this.$router.replace("/")
+  },
   data() {
     return {
       registro: false,
       error: false,
+      errormessage: "",
       correo: "",
       contrasena: "",
       repite: "",
@@ -187,7 +189,10 @@ export default {
         .signInWithEmailAndPassword(this.correo, this.contrasena)
         .then(
           (user) => this.$router.replace("/"),
-          (error) => console.log(error)
+          (error) => {
+            this.error = true;
+            this.errormessage = error.message;
+          }
         );
     },
 
@@ -197,18 +202,22 @@ export default {
           .auth()
           .createUserWithEmailAndPassword(this.correo, this.contrasena)
           .then(
-            (user) => this.$router.replace("/"),
+            (user) => this.cerrar(),
             (error) => console.log(error)
           );
+      }
+    },
+    comprobar() {
+      if (this.contrasena != this.repite) {
+        this.error = true;
       } else {
-        this.error == true;
+        this.error = false;
       }
     },
     cerrar() {
       firebase
         .auth()
-        .signOut()
-        .then(() => alert("sesion cerrada"));
+        .signOut();
     },
   },
 };
