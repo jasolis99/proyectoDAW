@@ -47,13 +47,11 @@
       </div>
     </div>
     <div id="centro" class="flex flex-col items-center">
-      <h1 class="text-white font-bold">
-        ¿Qué quieres aprender hoy?
-      </h1>
+      <h1 class="text-white font-bold">¿Qué quieres aprender hoy?</h1>
       <!-- <h1 v-if="autenticado" class="text-white font-bold">
         Bienvenido <span v-text="usuario.displayName"></span>
       </h1> -->
-      <input class="w-1/2 rounded-md p-2" type="search" name="" id="" />
+      <input class="w-1/2 rounded-md p-2" type="search" placeholder="Buscar lección" name="" id="" />
       <div
         class="w-2/3 bg-white border border-red-200 rounded-md flex justify-around items-center p-3 mt-10"
       >
@@ -89,14 +87,14 @@ export default {
       usuario: null,
       autenticado: false,
       mostrar: false,
-      nombre: '',
+      nombre: "",
     };
   },
   created() {
     if (firebase.auth().currentUser) {
       this.usuario = firebase.auth().currentUser;
-      if(!this.usuario.displayName){
-        this.nombre = this.usuario.email.charAt(0)
+      if (!this.usuario.displayName) {
+        this.nombre = this.usuario.email.charAt(0);
       }
       this.autenticado = true;
     }

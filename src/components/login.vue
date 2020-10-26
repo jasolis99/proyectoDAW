@@ -41,7 +41,7 @@
         name=""
         v-model="contrasena"
       />
-      <div v-if="error">
+      <div v-if="errormessage">
         <p v-text="errormessage" class="text-center text-red-600" />
       </div>
       <button
@@ -63,6 +63,13 @@
       v-else
       class="mx-auto flex flex-col px-5 justify-between w-1/2"
     >
+      <label for="">Nombre y Apellido</label>
+      <input
+        class="bg-gray-400 rounded px-2 py-2"
+        type="text"
+        name=""
+        v-model="displayName"
+      />
       <label for="">Correo</label>
       <input
         class="bg-gray-400 rounded px-2 py-2"
@@ -86,8 +93,11 @@
         v-model="repite"
         @keyup="comprobar()"
       />
-      <div v-if="error" class="mx-auto">
+      <div v-if="errorcontrasena" class="mx-auto">
         <p class="text-center text-red-600">Las contraseñas no coinciden</p>
+      </div>
+      <div v-if="errormessage">
+        <p v-text="errormessage" class="text-center text-red-600" />
       </div>
       <button
         class="block bg-black text-white mt-5 px-2 py-2 rounded-md"
@@ -112,14 +122,14 @@
 import firebase from "firebase";
 export default {
   created() {
-    if(firebase.auth().currentUser)
-      this.$router.replace("/")
+    if (firebase.auth().currentUser) this.$router.replace("/");
   },
   data() {
     return {
       registro: false,
-      error: false,
+      errorcontrasena: false,
       errormessage: "",
+      displayName: "",
       correo: "",
       contrasena: "",
       repite: "",
@@ -190,7 +200,6 @@ export default {
         .then(
           (user) => this.$router.replace("/"),
           (error) => {
-            this.error = true;
             this.errormessage = error.message;
           }
         );
@@ -202,22 +211,32 @@ export default {
           .auth()
           .createUserWithEmailAndPassword(this.correo, this.contrasena)
           .then(
-            (user) => this.cerrar(),
-            (error) => console.log(error)
+            (user) => {
+              firebase.auth().currentUser.updateProfile({
+                displayName: this.displayName,
+                photoURL: "https://www.kindpng.com/picc/m/9-93879_computer-icons-user-image-person-silhouette-user-silhouettes.png"
+              });
+              this.verifica();
+              this.cerrar();
+            },
+            (error) => {
+              this.errormessage = error.message;
+            }
           );
       }
     },
     comprobar() {
       if (this.contrasena != this.repite) {
-        this.error = true;
+        this.errorcontrasena = true;
       } else {
-        this.error = false;
+        this.errorcontrasena = false;
       }
     },
+    verifica() {
+      firebase.auth().currentUser.sendEmailVerification();
+    },
     cerrar() {
-      firebase
-        .auth()
-        .signOut();
+      firebase.auth().signOut();
     },
   },
 };
