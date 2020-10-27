@@ -22,7 +22,7 @@
       </p>
       <button
         v-if="!cambiar"
-        @click="cambiomail()"
+        @click="cambiar = !cambiar"
         class="p-1 rounded-md bg-blue-500 text-white"
       >
         Solicitar cambio de correo electrónico
@@ -33,7 +33,7 @@
             class="block w-2/5 border border-black rounded p-1"
             type="email"
             v-model="correo"
-            :placeholder= "emailactual"
+            :placeholder="emailactual"
             name=""
             id=""
           />
@@ -41,12 +41,92 @@
             Enviar
           </button>
           <button
-            @click="cambiomail()"
+            @click="cambiar = !cambiar"
             class="p-1 rounded-md bg-blue-500 text-white my-2"
           >
             Cancelar
           </button>
         </form>
+      </div>
+    </div>
+    <div class="my-5">
+      <h1>Eliminar cuenta</h1>
+      <p class="my-3">
+        Darse de baja conlleva la pérdida de todos los datos y de todos tus
+        progresos
+      </p>
+      <button
+        v-if="!baja"
+        @click="baja = !baja"
+        class="p-1 rounded-md bg-red-600 text-white"
+      >
+        Darse de baja
+      </button>
+      <div v-else>
+        <p>¿Estas seguro? Esta acción no se podrá revertir</p>
+        <button
+          @click="eliminarcuenta()"
+          class="p-1 rounded-md bg-red-600 text-white my-3"
+        >
+          Aceptar
+        </button>
+        <button
+          @click="baja = !baja"
+          class="p-1 rounded-md bg-red-600 text-white"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+    <div>
+      <h1>Cambiar imagen de perfil</h1>
+      <p class="my-3">Cambia tu imagen de perfil y da estilo a tu cuenta</p>
+      <button
+        v-if="!cambiarimagen"
+        @click="cambiarimagen = !cambiarimagen"
+        class="p-1 rounded-md bg-blue-500 text-white"
+      >
+        Cambiar imagen de perfil
+      </button>
+      <div v-else>
+        <input
+          v-model="imagen"
+          placeholder="URL de imagen"
+          class="p-1 border border-black rounded-md"
+          type="text"
+        />
+        <button
+          class="p-1 rounded-md bg-blue-500 text-white my-2"
+          @click="actualizarimagen()"
+        >
+          Enviar
+        </button>
+        <button
+          class="p-1 rounded-md bg-blue-500 text-white my-2"
+          @click="cambiarimagen = !cambiarimagen"
+        >
+          Cancelar
+        </button>
+        <div class="flex justify-around my-2">
+          <div class="flex flex-col items-center">
+            <h1>Imagen actual</h1>
+            <img
+              class="h-20 w-20 rounded-full"
+              v-if="datos.photoURL"
+              :src="datos.photoURL"
+              alt=""
+            />
+          </div>
+          <div class="flex flex-col items-center">
+            <h1>Imagen nueva</h1>
+            <img
+              class="h-20 w-20 rounded-full"
+              v-if="imagen"
+              :src="imagen"
+              alt=""
+            />
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -61,6 +141,9 @@ export default {
       emailactual: firebase.auth().currentUser.email,
       correo: "",
       cambiar: false,
+      cambiarimagen: false,
+      baja: false,
+      imagen: "",
     };
   },
   methods: {
@@ -75,14 +158,23 @@ export default {
           // An error happened.
         });
     },
-    cambiomail() {
-      this.cambiar = !this.cambiar;
+    updatemail() {
+      firebase
+        .auth()
+        .currentUser.updateEmail(this.correo)
+        .then(() => (this.cambiar = false));
     },
-    updatemail(){
-      firebase.auth().currentUser.updateEmail(this.correo).then(()=>
-        this.cambiar = false
-      )
-    }
+    eliminarcuenta() {
+      firebase
+        .auth()
+        .currentUser.delete()
+        .then(() => this.$router.replace("/"));
+    },
+    actualizarimagen() {
+      firebase.auth().currentUser.updateProfile({
+        photoURL:this.imagen,
+      }).then(()=>this.cambiarimagen = !this.cambiarimagen);
+    },
   },
 };
 </script>
