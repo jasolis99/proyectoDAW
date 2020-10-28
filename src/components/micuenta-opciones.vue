@@ -90,10 +90,10 @@
       </button>
       <div v-else>
         <input
-          v-model="imagen"
-          placeholder="URL de imagen"
-          class="p-1 border border-black rounded-md"
-          type="text"
+          type="file"
+          accept="image/*"
+          id="imagen"
+          @change="processFile($event)"
         />
         <button
           class="p-1 rounded-md bg-blue-500 text-white my-2"
@@ -121,8 +121,8 @@
             <h1>Imagen nueva</h1>
             <img
               class="h-20 w-20 rounded-full"
-              v-if="imagen"
-              :src="imagen"
+              v-if="nuevaimagen"
+              :src="nuevaimagen"
               alt=""
             />
           </div>
@@ -143,7 +143,8 @@ export default {
       cambiar: false,
       cambiarimagen: false,
       baja: false,
-      imagen: "",
+      imagen: null,
+      nuevaimagen: null,
     };
   },
   methods: {
@@ -170,10 +171,26 @@ export default {
         .currentUser.delete()
         .then(() => this.$router.replace("/"));
     },
+    processFile(event) {
+      this.imagen = event.target.files[0];
+      this.nuevaimagen = URL.createObjectURL(this.imagen);
+      console.log(this.imagen);
+    },
     actualizarimagen() {
-      firebase.auth().currentUser.updateProfile({
-        photoURL:this.imagen,
-      }).then(()=>this.cambiarimagen = !this.cambiarimagen);
+      let storageRef = firebase.storage().ref(firebase.auth().currentUser.uid);
+      storageRef.put(this.imagen).then((image) => {
+        this.cambiarimagen = !this.cambiarimagen;
+        console.log(image);
+        storageRef.getDownloadURL().then((url) => {
+          firebase.auth().currentUser.updateProfile({
+            photoURL: url,
+          });
+        });
+      });
+
+      // firebase.auth().currentUser.updateProfile({
+      //   photoURL:this.imagen,
+      // }).then(()=>this.cambiarimagen = !this.cambiarimagen);
     },
   },
 };
