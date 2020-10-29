@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="h-auto overflow-y-auto">
     <div>
       <h1>Cambio de contraseña</h1>
       <p class="my-3">
@@ -41,7 +41,7 @@
             Enviar
           </button>
           <button
-            @click="cambiar = !cambiar"
+            @click="resetear()"
             class="p-1 rounded-md bg-blue-500 text-white my-2"
           >
             Cancelar
@@ -71,7 +71,7 @@
           Aceptar
         </button>
         <button
-          @click="baja = !baja"
+          @click="resetear()"
           class="p-1 rounded-md bg-red-600 text-white"
         >
           Cancelar
@@ -89,24 +89,43 @@
         Cambiar imagen de perfil
       </button>
       <div v-else>
-        <input
-          type="file"
-          accept="image/*"
-          id="imagen"
-          @change="processFile($event)"
-        />
-        <button
-          class="p-1 rounded-md bg-blue-500 text-white my-2"
-          @click="actualizarimagen()"
+        <div
+          class="relative border border-dashed h-48 bg-blue-100 border-blue-200"
         >
-          Enviar
-        </button>
-        <button
-          class="p-1 rounded-md bg-blue-500 text-white my-2"
-          @click="cambiarimagen = !cambiarimagen"
-        >
-          Cancelar
-        </button>
+          <input
+            type="file"
+            accept="image/*"
+            id="imagen"
+            class="z-10 relative opacity-0 border border-blue-200 w-full h-full"
+            @change="processFile($event)"
+          />
+          <div class="absolute flex items-center inset-0">
+            <p class="z-0 mx-auto w-4/5 text-center">
+              Arrastra y suelta la imagen
+            </p>
+            <button
+              v-if="!enviar"
+              @click="resetear()"
+              class="z-10 absolute bottom-0 p-1 rounded-md bg-blue-500 text-white w-full"
+            >
+              Cancelar
+            </button>
+            <div v-else class="absolute bottom-0 flex w-full">
+              <button
+                @click="actualizarimagen()"
+                class="z-10 w-1/2 p-1 rounded-md bg-blue-500 text-white w-full"
+              >
+                Enviar
+              </button>
+              <button
+                @click="prueba()"
+                class="z-10 w-1/2 p-1 rounded-md bg-blue-500 text-white w-full"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
         <div class="flex justify-around my-2">
           <div class="flex flex-col items-center">
             <h1>Imagen actual</h1>
@@ -134,6 +153,7 @@
 
 <script>
 import firebase from "firebase";
+import Vue from "vue";
 export default {
   data() {
     return {
@@ -145,9 +165,24 @@ export default {
       baja: false,
       imagen: null,
       nuevaimagen: null,
+      enviar: false,
     };
   },
   methods: {
+    resetear() {
+      const datos = {
+        datos: firebase.auth().currentUser,
+        emailactual: firebase.auth().currentUser.email,
+        correo: "",
+        cambiar: false,
+        cambiarimagen: false,
+        baja: false,
+        imagen: null,
+        nuevaimagen: null,
+        enviar: false,
+      };
+      Object.assign(this.$data, datos);
+    },
     cambiocontrasena() {
       firebase
         .auth()
@@ -174,7 +209,7 @@ export default {
     processFile(event) {
       this.imagen = event.target.files[0];
       this.nuevaimagen = URL.createObjectURL(this.imagen);
-      console.log(this.imagen);
+      this.enviar = true;
     },
     actualizarimagen() {
       let storageRef = firebase.storage().ref(firebase.auth().currentUser.uid);
