@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto">
-    <div v-if="!autenticado" class="flex justify-end">
+    <div v-if="!auth" class="flex justify-end">
       <router-link class="px-2 text-white font-thin text-sm" to="/login"
         >Iniciar sesión</router-link
       >
@@ -8,26 +8,23 @@
         >Registro</router-link
       >
     </div>
-    <div v-if="autenticado" class="flex justify-end">
-      <!-- <a @click="cerrar()" class="px-2 text-white font-thin text-sm" href="#"
-        >Cerrar sesión</a
-      > -->
-      <div @click="mostrar = !mostrar" class="relative">
+    <div v-if="auth" class="flex justify-end">
+      <div @click="show = !show" class="relative">
         <button
           class="block h-12 w-12 rounded-full overflow-hidden border-2 border-gray-600 focus:outline-none focus:border-white"
         >
           <img
-            v-if="usuario.photoURL"
+            v-if="user.photoURL"
             class="h-full w-full object-cover"
-            :src="usuario.photoURL"
+            :src="user.photoURL"
             alt="Your avatar"
           />
           <div v-else class="h-full w-full object-cover bg-white">
-            <span class="text-center uppercase text-2xl" v-text="nombre"></span>
+            <span class="text-center uppercase text-2xl" v-text="name"></span>
           </div>
         </button>
         <div
-          v-if="mostrar"
+          v-if="show"
           class="absolute right-0 mt-2 py-2 w-48 bg-white rounded-lg shadow-xl"
         >
           <router-link
@@ -38,7 +35,7 @@
             >Mi cuenta</router-link
           >
           <a
-            @click="cerrar()"
+            @click="logout()"
             href="#"
             class="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white"
             >Cerrar sesión</a
@@ -48,10 +45,13 @@
     </div>
     <div id="centro" class="flex flex-col items-center">
       <h1 class="text-white font-bold">¿Qué quieres aprender hoy?</h1>
-      <!-- <h1 v-if="autenticado" class="text-white font-bold">
-        Bienvenido <span v-text="usuario.displayName"></span>
-      </h1> -->
-      <input class="w-1/2 rounded-md p-2" type="search" placeholder="Buscar lección" name="" id="" />
+      <input
+        class="w-1/2 rounded-md p-2"
+        type="search"
+        placeholder="Buscar lección"
+        name=""
+        id=""
+      />
       <div
         class="w-2/3 bg-white border border-red-200 rounded-md flex justify-around items-center p-3 mt-10"
       >
@@ -84,23 +84,23 @@ import firebase from "firebase";
 export default {
   data() {
     return {
-      usuario: null,
-      autenticado: false,
-      mostrar: false,
-      nombre: "",
+      user: null,
+      auth: false,
+      show: false,
+      name: "",
     };
   },
   created() {
     if (firebase.auth().currentUser) {
-      this.usuario = firebase.auth().currentUser;
-      if (!this.usuario.displayName) {
-        this.nombre = this.usuario.email.charAt(0);
+      this.user = firebase.auth().currentUser;
+      if (!this.user.displayName) {
+        this.name = this.user.email.charAt(0);
       }
-      this.autenticado = true;
+      this.auth = true;
     }
   },
   methods: {
-    cerrar() {
+    logout() {
       firebase.auth().signOut();
     },
   },

@@ -3,7 +3,7 @@
     id="centro"
     class="w-2/5 container shadow-md rounded-md bg-white mx-auto px-10 py-5 md:w-2/3"
   >
-    <h1 v-if="!registro" class="text-center text-3xl font-light">
+    <h1 v-if="!register" class="text-center text-3xl font-light">
       Iniciar sesión
     </h1>
     <h1 v-else class="text-center text-3xl font-light">Regístrate</h1>
@@ -24,22 +24,22 @@
 
     <form
       @submit.prevent="login"
-      v-if="!registro"
+      v-if="!register"
       class="mx-auto flex flex-col px-5 justify-between w-1/2"
     >
-      <label for="">Correo</label>
+      <label for="">Email</label>
       <input
         class="bg-gray-400 rounded px-2 py-2"
         type="email"
         name=""
-        v-model="correo"
+        v-model="mail"
       />
       <label for="">Contraseña</label>
       <input
         class="bg-gray-400 rounded px-2 py-2"
         type="password"
         name=""
-        v-model="contrasena"
+        v-model="password"
       />
       <div v-if="errormessage">
         <p v-text="errormessage" class="text-center text-red-600" />
@@ -52,7 +52,7 @@
         Iniciar sesión
       </button>
       <p class="text-center">
-        ¿No estás registrado?<span class="p-1" href="#" @click="registro = true"
+        ¿No estás registrado?<span class="p-1" href="#" @click="register = true"
           >Regístrate</span
         >
       </p>
@@ -63,6 +63,20 @@
       v-else
       class="mx-auto flex flex-col px-5 justify-between w-1/2"
     >
+      <div
+        v-if="!picture"
+        class="mx-auto h-20 w-20 rounded-full border border-black"
+      >
+        <input
+          class="w-full h-full opacity-0"
+          @change="processFile($event)"
+          type="file"
+          name=""
+        />
+      </div>
+      <div v-else class="mx-auto h-20 w-20 rounded-full border border-black">
+        <img class="w-full h-full rounded-full" :src="showpicture" />
+      </div>
       <label for="">Nombre y Apellido</label>
       <input
         class="bg-gray-400 rounded px-2 py-2"
@@ -70,45 +84,45 @@
         name=""
         v-model="displayName"
       />
-      <label for="">Correo</label>
+      <label for="">Email</label>
       <input
         class="bg-gray-400 rounded px-2 py-2"
         type="email"
         name=""
-        v-model="correo"
+        v-model="mail"
       />
       <label for="">Contraseña</label>
       <input
         class="bg-gray-400 rounded px-2 py-2"
         type="password"
         name=""
-        id=""
-        v-model="contrasena"
+        v-model="password"
       />
       <label for="">Repite contraseña</label>
       <input
         class="bg-gray-400 rounded px-2 py-2"
         type="password"
         name=""
-        v-model="repite"
-        @keyup="comprobar()"
+        v-model="repeat"
+        @keyup="checkpassword()"
       />
-      <div v-if="errorcontrasena" class="mx-auto">
+      <div v-if="passworderror" class="mx-auto">
         <p class="text-center text-red-600">Las contraseñas no coinciden</p>
       </div>
-      <div v-if="errormessage">
+      <div v-if="errormessage" class="mx-auto">
         <p v-text="errormessage" class="text-center text-red-600" />
       </div>
       <button
         class="block bg-black text-white mt-5 px-2 py-2 rounded-md"
         type="submit"
         value=""
-        id="btn_registro"
+        id="btn_register"
+        :disabled="!enabled"
       >
         Registrarse
       </button>
       <p class="text-center">
-        ¿Tienes cuenta?<span class="p-1" @click="registro = false"
+        ¿Tienes cuenta?<span class="p-1" @click="register = false"
           >Inicia sesión</span
         >
       </p>
@@ -126,14 +140,27 @@ export default {
   },
   data() {
     return {
-      registro: false,
-      errorcontrasena: false,
-      errormessage: "",
-      displayName: "",
-      correo: "",
-      contrasena: "",
-      repite: "",
+      register: false,
+      passworderror: false,
+      errormessage: null,
+      picture: null,
+      showpicture: null,
+      displayName: null,
+      mail: null,
+      password: null,
+      repeat: null,
     };
+  },
+  computed: {
+    enabled: () => {
+      if (this.picture && this.displayName && this.mail && this.password) {
+        if (this.password == this.repeat) {
+          return true;
+        }
+      } else {
+        return false;
+      }
+    },
   },
   methods: {
     googlelog() {
@@ -145,25 +172,6 @@ export default {
           (user) => this.$router.replace("/"),
           (error) => console.log(error)
         );
-      // .then(function (result) {
-      //   // This gives you a Google Access Token. You can use it to access the Google API.
-      //   var token = result.credential.accessToken;
-      //   // The signed-in user info.
-      //   var user = result.user;
-      //   // ...
-      //   alert(token);
-      // })
-      // .catch(function (error) {
-      //   // Handle Errors here.
-      //   var errorCode = error.code;
-      //   var errorMessage = error.message;
-      //   // The email of the user's account used.
-      //   var email = error.email;
-      //   // The firebase.auth.AuthCredential type that was used.
-      //   var credential = error.credential;
-      //   // ...
-      //   console.log("Error porque me da la gana")
-      // });
     },
     facebooklog() {
       var provider = new firebase.auth.FacebookAuthProvider();
@@ -174,29 +182,12 @@ export default {
           (user) => this.$router.replace("/"),
           (error) => console.log(error)
         );
-      // .then(function (result) {
-      //   // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-      //   var token = result.credential.accessToken;
-      //   // The signed-in user info.
-      //   var user = result.user;
-      //   // ...
-      // })
-      // .catch(function (error) {
-      //   // Handle Errors here.
-      //   var errorCode = error.code;
-      //   var errorMessage = error.message;
-      //   // The email of the user's account used.
-      //   var email = error.email;
-      //   // The firebase.auth.AuthCredential type that was used.
-      //   var credential = error.credential;
-      //   // ...
-      // });
     },
 
     login() {
       firebase
         .auth()
-        .signInWithEmailAndPassword(this.correo, this.contrasena)
+        .signInWithEmailAndPassword(this.mail, this.password)
         .then(
           (user) => this.$router.replace("/"),
           (error) => {
@@ -204,38 +195,56 @@ export default {
           }
         );
     },
+    processFile(event) {
+      this.picture = event.target.files[0];
+      this.showpicture = URL.createObjectURL(this.picture);
+    },
 
     register() {
-      if (this.contrasena == this.repite) {
+      if (this.password == this.repite) {
         firebase
           .auth()
-          .createUserWithEmailAndPassword(this.correo, this.contrasena)
+          .createUserWithEmailAndPassword(this.mail, this.password)
           .then(
             (user) => {
               firebase.auth().currentUser.updateProfile({
                 displayName: this.displayName,
-                photoURL: "https://www.kindpng.com/picc/m/9-93879_computer-icons-user-image-person-silhouette-user-silhouettes.png"
               });
-              this.verifica();
-              this.cerrar();
+              if (this.picture) {
+                this.uploadpicture();
+              }
+              this.emailverification();
+              this.logout();
             },
             (error) => {
+              console.log("error");
+              this.errormessage = false;
               this.errormessage = error.message;
             }
           );
       }
     },
-    comprobar() {
-      if (this.contrasena != this.repite) {
-        this.errorcontrasena = true;
+    uploadpicture() {
+      let storageRef = firebase.storage().ref(firebase.auth().currentUser.uid);
+      storageRef.put(this.picture).then((image) => {
+        storageRef.getDownloadURL().then((url) => {
+          firebase.auth().currentUser.updateProfile({
+            photoURL: url,
+          });
+        });
+      });
+    },
+    checkpassword() {
+      if (this.password != this.repite) {
+        this.passworderror = true;
       } else {
-        this.errorcontrasena = false;
+        this.passworderror = false;
       }
     },
-    verifica() {
+    emailverification() {
       firebase.auth().currentUser.sendEmailVerification();
     },
-    cerrar() {
+    logout() {
       firebase.auth().signOut();
     },
   },

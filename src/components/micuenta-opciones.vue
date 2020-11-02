@@ -7,7 +7,7 @@
         cuenta.
       </p>
       <button
-        @click="cambiocontrasena()"
+        @click="updatepassword()"
         class="p-1 rounded-md bg-blue-500 text-white"
       >
         Solicitar cambio de contraseña
@@ -21,8 +21,8 @@
         texto.
       </p>
       <button
-        v-if="!cambiar"
-        @click="cambiar = !cambiar"
+        v-if="!change"
+        @click="change = !change"
         class="p-1 rounded-md bg-blue-500 text-white"
       >
         Solicitar cambio de correo electrónico
@@ -32,8 +32,8 @@
           <input
             class="block w-2/5 border border-black rounded p-1"
             type="email"
-            v-model="correo"
-            :placeholder="emailactual"
+            v-model="email"
+            :placeholder="currentmail"
             name=""
             id=""
           />
@@ -41,7 +41,7 @@
             Enviar
           </button>
           <button
-            @click="resetear()"
+            @click="reset()"
             class="p-1 rounded-md bg-blue-500 text-white my-2"
           >
             Cancelar
@@ -52,12 +52,12 @@
     <div class="my-5">
       <h1>Eliminar cuenta</h1>
       <p class="my-3">
-        Darse de baja conlleva la pérdida de todos los datos y de todos tus
+        Darse de baja conlleva la pérdida de todos los data y de todos tus
         progresos
       </p>
       <button
-        v-if="!baja"
-        @click="baja = !baja"
+        v-if="!delet"
+        @click="delet = !delet"
         class="p-1 rounded-md bg-red-600 text-white"
       >
         Darse de baja
@@ -65,13 +65,13 @@
       <div v-else>
         <p>¿Estas seguro? Esta acción no se podrá revertir</p>
         <button
-          @click="eliminarcuenta()"
+          @click="deleteaccount()"
           class="p-1 rounded-md bg-red-600 text-white my-3"
         >
           Aceptar
         </button>
         <button
-          @click="resetear()"
+          @click="reset()"
           class="p-1 rounded-md bg-red-600 text-white"
         >
           Cancelar
@@ -82,8 +82,8 @@
       <h1>Cambiar imagen de perfil</h1>
       <p class="my-3">Cambia tu imagen de perfil y da estilo a tu cuenta</p>
       <button
-        v-if="!cambiarimagen"
-        @click="cambiarimagen = !cambiarimagen"
+        v-if="!updatepicture"
+        @click="updatepicture = !updatepicture"
         class="p-1 rounded-md bg-blue-500 text-white"
       >
         Cambiar imagen de perfil
@@ -95,7 +95,7 @@
           <input
             type="file"
             accept="image/*"
-            id="imagen"
+            id="picture"
             class="z-10 relative opacity-0 border border-blue-200 w-full h-full"
             @change="processFile($event)"
           />
@@ -104,21 +104,21 @@
               Arrastra y suelta la imagen
             </p>
             <button
-              v-if="!enviar"
-              @click="resetear()"
+              v-if="!send"
+              @click="reset()"
               class="z-10 absolute bottom-0 p-1 rounded-md bg-blue-500 text-white w-full"
             >
               Cancelar
             </button>
             <div v-else class="absolute bottom-0 flex w-full">
               <button
-                @click="actualizarimagen()"
+                @click="updatepicture()"
                 class="z-10 w-1/2 p-1 rounded-md bg-blue-500 text-white w-full"
               >
                 Enviar
               </button>
               <button
-                @click="prueba()"
+                @click="reset()"
                 class="z-10 w-1/2 p-1 rounded-md bg-blue-500 text-white w-full"
               >
                 Cancelar
@@ -131,8 +131,8 @@
             <h1>Imagen actual</h1>
             <img
               class="h-20 w-20 rounded-full"
-              v-if="datos.photoURL"
-              :src="datos.photoURL"
+              v-if="data.photoURL"
+              :src="data.photoURL"
               alt=""
             />
           </div>
@@ -140,8 +140,8 @@
             <h1>Imagen nueva</h1>
             <img
               class="h-20 w-20 rounded-full"
-              v-if="nuevaimagen"
-              :src="nuevaimagen"
+              v-if="newpicture"
+              :src="newpicture"
               alt=""
             />
           </div>
@@ -157,36 +157,36 @@ import Vue from "vue";
 export default {
   data() {
     return {
-      datos: firebase.auth().currentUser,
-      emailactual: firebase.auth().currentUser.email,
-      correo: "",
-      cambiar: false,
-      cambiarimagen: false,
-      baja: false,
-      imagen: null,
-      nuevaimagen: null,
-      enviar: false,
+      data: firebase.auth().currentUser,
+      currentmail: firebase.auth().currentUser.email,
+      email: "",
+      change: false,
+      updatepicture: false,
+      delet: false,
+      picture: null,
+      newpicture: null,
+      send: false,
     };
   },
   methods: {
-    resetear() {
-      const datos = {
-        datos: firebase.auth().currentUser,
-        emailactual: firebase.auth().currentUser.email,
-        correo: "",
-        cambiar: false,
-        cambiarimagen: false,
-        baja: false,
-        imagen: null,
-        nuevaimagen: null,
-        enviar: false,
+    reset() {
+      const data = {
+        data: firebase.auth().currentUser,
+        currentmail: firebase.auth().currentUser.email,
+        email: "",
+        change: false,
+        updatepicture: false,
+        deleteaccount: false,
+        picture: null,
+        newpicture: null,
+        send: false,
       };
-      Object.assign(this.$data, datos);
+      Object.assign(this.$data, data);
     },
-    cambiocontrasena() {
+    updatepassword() {
       firebase
         .auth()
-        .sendPasswordResetEmail(this.datos.email)
+        .sendPasswordResetEmail(this.data.email)
         .then(function () {
           // Email sent.
         })
@@ -197,24 +197,24 @@ export default {
     updatemail() {
       firebase
         .auth()
-        .currentUser.updateEmail(this.correo)
-        .then(() => (this.cambiar = false));
+        .currentUser.updateEmail(this.email)
+        .then(() => (this.change = false));
     },
-    eliminarcuenta() {
+    deleteaccount() {
       firebase
         .auth()
         .currentUser.delete()
         .then(() => this.$router.replace("/"));
     },
     processFile(event) {
-      this.imagen = event.target.files[0];
-      this.nuevaimagen = URL.createObjectURL(this.imagen);
-      this.enviar = true;
+      this.picture = event.target.files[0];
+      this.newpicture = URL.createObjectURL(this.picture);
+      this.send = true;
     },
-    actualizarimagen() {
+    updatepicture() {
       let storageRef = firebase.storage().ref(firebase.auth().currentUser.uid);
-      storageRef.put(this.imagen).then((image) => {
-        this.cambiarimagen = !this.cambiarimagen;
+      storageRef.put(this.picture).then((image) => {
+        this.updatepicture = !this.updatepicture;
         console.log(image);
         storageRef.getDownloadURL().then((url) => {
           firebase.auth().currentUser.updateProfile({
@@ -222,10 +222,6 @@ export default {
           });
         });
       });
-
-      // firebase.auth().currentUser.updateProfile({
-      //   photoURL:this.imagen,
-      // }).then(()=>this.cambiarimagen = !this.cambiarimagen);
     },
   },
 };

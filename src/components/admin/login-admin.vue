@@ -24,7 +24,7 @@
 export default {
   data() {
     return {
-      registro: false
+      register: false
     }
   },
 };

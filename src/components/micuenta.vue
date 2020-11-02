@@ -4,7 +4,7 @@
       <div class="p-10 w-2/5 flex border-r border-black flex-col">
         <router-link tag="a" class="my-5" to="opciones">Mi Cuenta</router-link>
         <router-link class="my-5" to="logros">Logros</router-link>
-        <a @click="cerrar()" href="#">Cerrar sesión</a>
+        <a @click="logout()" href="#">Cerrar sesión</a>
       </div>
       <div class="w-1/2 p-4">
         <router-view></router-view>
@@ -20,7 +20,7 @@ export default {
     return {};
   },
   methods: {
-    cerrar() {
+    logout() {
       firebase.auth().signOut().then(()=>this.$router.replace("/"));
     },
   },
