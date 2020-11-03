@@ -12,3 +12,8 @@ yarn-error.log*
 *.ntvs*
 *.njsproj
 *.sln
+
+#web config
+
+src/firebase-config.js
+src/proyecto-daw-eba1d-firebase-adminsdk-wou3o-b71ea1cfcd.json

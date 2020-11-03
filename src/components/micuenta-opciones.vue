@@ -215,7 +215,6 @@ export default {
       let storageRef = firebase.storage().ref(firebase.auth().currentUser.uid);
       storageRef.put(this.picture).then((image) => {
         this.updatepicture = !this.updatepicture;
-        console.log(image);
         storageRef.getDownloadURL().then((url) => {
           firebase.auth().currentUser.updateProfile({
             photoURL: url,

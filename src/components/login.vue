@@ -3,7 +3,7 @@
     id="centro"
     class="w-2/5 container shadow-md rounded-md bg-white mx-auto px-10 py-5 md:w-2/3"
   >
-    <h1 v-if="!register" class="text-center text-3xl font-light">
+    <h1 v-if="!registerform" class="text-center text-3xl font-light">
       Iniciar sesión
     </h1>
     <h1 v-else class="text-center text-3xl font-light">Regístrate</h1>
@@ -23,8 +23,8 @@
     </div>
 
     <form
-      @submit.prevent="login"
-      v-if="!register"
+      @submit.prevent="login()"
+      v-if="!registerform"
       class="mx-auto flex flex-col px-5 justify-between w-1/2"
     >
       <label for="">Email</label>
@@ -33,6 +33,7 @@
         type="email"
         name=""
         v-model="mail"
+        required
       />
       <label for="">Contraseña</label>
       <input
@@ -40,6 +41,7 @@
         type="password"
         name=""
         v-model="password"
+        required
       />
       <div v-if="errormessage">
         <p v-text="errormessage" class="text-center text-red-600" />
@@ -52,14 +54,14 @@
         Iniciar sesión
       </button>
       <p class="text-center">
-        ¿No estás registrado?<span class="p-1" href="#" @click="register = true"
+        ¿No estás registrado?<span class="p-1" href="#" @click="reset()"
           >Regístrate</span
         >
       </p>
     </form>
 
     <form
-      @submit.prevent="register"
+      @submit.prevent="register()"
       v-else
       class="mx-auto flex flex-col px-5 justify-between w-1/2"
     >
@@ -83,6 +85,7 @@
         type="text"
         name=""
         v-model="displayName"
+        required
       />
       <label for="">Email</label>
       <input
@@ -90,6 +93,7 @@
         type="email"
         name=""
         v-model="mail"
+        required
       />
       <label for="">Contraseña</label>
       <input
@@ -97,6 +101,7 @@
         type="password"
         name=""
         v-model="password"
+        required
       />
       <label for="">Repite contraseña</label>
       <input
@@ -105,6 +110,7 @@
         name=""
         v-model="repeat"
         @keyup="checkpassword()"
+        required
       />
       <div v-if="passworderror" class="mx-auto">
         <p class="text-center text-red-600">Las contraseñas no coinciden</p>
@@ -117,20 +123,17 @@
         type="submit"
         value=""
         id="btn_register"
-        :disabled="!enabled"
       >
         Registrarse
       </button>
       <p class="text-center">
-        ¿Tienes cuenta?<span class="p-1" @click="register = false"
+        ¿Tienes cuenta?<span class="p-1" @click="reset()"
           >Inicia sesión</span
         >
       </p>
     </form>
   </div>
 </template>
-
-
 
 <script>
 import firebase from "firebase";
@@ -140,7 +143,7 @@ export default {
   },
   data() {
     return {
-      register: false,
+      registerform: false,
       passworderror: false,
       errormessage: null,
       picture: null,
@@ -151,18 +154,22 @@ export default {
       repeat: null,
     };
   },
-  computed: {
-    enabled: () => {
-      if (this.picture && this.displayName && this.mail && this.password) {
-        if (this.password == this.repeat) {
-          return true;
-        }
-      } else {
-        return false;
-      }
-    },
-  },
   methods: {
+    reset(){
+      const data = {
+        registerform: !this.registerform,
+        passworderror: false,
+        errormessage: null,
+        picture: null,
+        showpicture: null,
+        displayName: null,
+        mail: null,
+        password: null,
+        repeat: null,
+      };
+      Object.assign(this.$data, data);
+
+    },
     googlelog() {
       var provider = new firebase.auth.GoogleAuthProvider();
       firebase
@@ -201,7 +208,7 @@ export default {
     },
 
     register() {
-      if (this.password == this.repite) {
+      if (this.password == this.repeat) {
         firebase
           .auth()
           .createUserWithEmailAndPassword(this.mail, this.password)
@@ -217,7 +224,6 @@ export default {
               this.logout();
             },
             (error) => {
-              console.log("error");
               this.errormessage = false;
               this.errormessage = error.message;
             }
@@ -235,7 +241,7 @@ export default {
       });
     },
     checkpassword() {
-      if (this.password != this.repite) {
+      if (this.password != this.repeat) {
         this.passworderror = true;
       } else {
         this.passworderror = false;
