@@ -5,16 +5,8 @@ import firebase from 'firebase'
 import App from './App'
 import router from './router'
 import {firebaseConfig} from './firebase-config'
-require("./style/main.css")
 
-// var admin = require('firebase-admin')
-
-// var serviceAccount = require("./proyecto-daw-eba1d-firebase-adminsdk-wou3o-b71ea1cfcd.json");
-
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount),
-//   databaseURL: "https://proyecto-daw-eba1d.firebaseio.com"
-// });
+require('./style/main.css')
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
