@@ -15,12 +15,15 @@
       :key="user.uid"
       class="flex justify-between items-center border border-black rounded-md p-2 my-5"
     >
-      <p class=" w-1/2">{{ user.email }}</p>
-      <div class=" w-1/2 flex justify-around ">
-        <button @click="deleteaccount(user.email)" class="p-1 border border-black bg-red-600 rounded-md">
+      <p class="w-1/2">{{ user.email }}</p>
+      <div class="w-1/2 flex justify-around">
+        <button
+          @click="deleteaccount(user.uid)"
+          class="p-1 border border-black bg-red-600 rounded-md"
+        >
           Dar de baja
         </button>
-        <button class="p-1 border border-black bg-green-400 rounded-md">
+        <button @click="resetpassword(user.email)" class="p-1 border border-black bg-green-400 rounded-md">
           Cambio de contraseña
         </button>
       </div>
@@ -29,6 +32,7 @@
 </template>
 
 <script>
+import firebase from 'firebase'
 export default {
   data() {
     return {
@@ -36,9 +40,8 @@ export default {
       search: "",
     };
   },
-  async beforeCreate() {
-    const response = await fetch("http://localhost:3000/users");
-    this.users = await response.json();
+  created() {
+    this.getusers();
   },
   computed: {
     userfilter() {
@@ -49,18 +52,24 @@ export default {
     },
   },
   methods: {
-    deleteaccount(mail){
-        fetch('http://localhost:3000/deleteuser',{
-          method:'post',
-          headers:{
-            'Accept':'application/json',
-            'Content-Type':'application/json'
-          },
-          body:JSON.stringify({mail:mail})
-        })
-
-    }
-  },  
+    async getusers() {
+      const response = await fetch("http://localhost:3000/users");
+      this.users = await response.json();
+    },
+    deleteaccount(uid) {
+      fetch("http://localhost:3000/deleteuser", {
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ uid: uid }),
+      }).then(this.getusers());
+    },
+    resetpassword(email) {
+      firebase.auth().sendPasswordResetEmail(email)
+    },
+  },
 };
 </script>
 

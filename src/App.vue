@@ -27,6 +27,7 @@ export default {
 };
 </script>
 <style lang="css">
+@import './style/main.css';
 .fondo {
   background: url("./assets/background-educativo-1.png");
   background-repeat: repeat;

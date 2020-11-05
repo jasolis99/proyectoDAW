@@ -1,10 +1,10 @@
 <template>
   <div class="container mx-auto">
     <div v-if="!auth" class="flex justify-end">
-      <router-link class="px-2 text-white font-thin text-sm" to="/login"
+      <router-link class="px-2 text-white font-thin text-sm" tag="a" to="/login"
         >Iniciar sesión</router-link
       >
-      <router-link class="px-2 text-white font-thin text-sm" to="/login"
+      <router-link class="px-2 text-white font-thin text-sm" tag="a" to="/login"
         >Registro</router-link
       >
     </div>
@@ -107,7 +107,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,regular,italic,600,600italic,700,700italic,800,800italic);
 @import url(https://fonts.googleapis.com/css?family=Roboto:100,100italic,300,300italic,regular,italic,500,500italic,700,700italic,900,900italic);
 @import url(https://fonts.googleapis.com/css?family=Poppins:100,100italic,200,200italic,300,300italic,regular,italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic);
