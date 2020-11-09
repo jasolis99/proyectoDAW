@@ -17,7 +17,7 @@
 import firebase from 'firebase'
 export default {
   data() {
-    return {};
+    return {}
   },
   methods: {
     logout() {

@@ -196,7 +196,10 @@ export default {
         .auth()
         .signInWithEmailAndPassword(this.mail, this.password)
         .then(
-          (user) => this.$router.replace("/"),
+          (user) =>{
+            this.reset()
+            this.$router.replace("/")
+          },
           (error) => {
             this.errormessage = error.message;
           }

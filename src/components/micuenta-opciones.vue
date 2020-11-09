@@ -1,5 +1,5 @@
 <template>
-  <div class="h-auto overflow-y-auto">
+  <div class="overflow-y-scroll">
     <div>
       <h1>Cambio de contraseña</h1>
       <p class="my-3">
@@ -7,13 +7,16 @@
         cuenta.
       </p>
       <button
+        v-if="!oksend"
         @click="updatepassword()"
         class="p-1 rounded-md bg-blue-500 text-white"
       >
         Solicitar cambio de contraseña
       </button>
+      <div v-else class="p-1 rounded-md bg-green-500 text-white">
+        Correo enviado correctamente
+      </div>
     </div>
-
     <div class="my-5">
       <h1>Cambiar correo electrónico</h1>
       <p class="my-3">
@@ -21,13 +24,13 @@
         texto.
       </p>
       <button
-        v-if="!change"
+        v-if="!change && !okmail"
         @click="change = !change"
         class="p-1 rounded-md bg-blue-500 text-white"
       >
         Solicitar cambio de correo electrónico
       </button>
-      <div v-else>
+      <div v-else-if="!okmail">
         <form @submit.prevent="updatemail()" action="">
           <input
             class="block w-2/5 border border-black rounded p-1"
@@ -36,11 +39,16 @@
             :placeholder="currentmail"
             name=""
             id=""
+            required
           />
-          <button class="p-1 rounded-md bg-blue-500 text-white my-2">
+          <button
+            type="submit"
+            class="p-1 rounded-md bg-blue-500 text-white my-2"
+          >
             Enviar
           </button>
           <button
+            type="button"
             @click="reset()"
             class="p-1 rounded-md bg-blue-500 text-white my-2"
           >
@@ -48,11 +56,14 @@
           </button>
         </form>
       </div>
+      <div v-if="okmail" class="p-1 rounded-md bg-green-500 text-white">
+        Correo cambiado correctamente
+      </div>
     </div>
     <div class="my-5">
       <h1>Eliminar cuenta</h1>
       <p class="my-3">
-        Darse de baja conlleva la pérdida de todos los data y de todos tus
+        Darse de baja conlleva la pérdida de todos los datos y de todos tus
         progresos
       </p>
       <button
@@ -70,10 +81,7 @@
         >
           Aceptar
         </button>
-        <button
-          @click="reset()"
-          class="p-1 rounded-md bg-red-600 text-white"
-        >
+        <button @click="reset()" class="p-1 rounded-md bg-red-600 text-white">
           Cancelar
         </button>
       </div>
@@ -82,13 +90,13 @@
       <h1>Cambiar imagen de perfil</h1>
       <p class="my-3">Cambia tu imagen de perfil y da estilo a tu cuenta</p>
       <button
-        v-if="!updatepicture"
+        v-if="!updatepicture && !okpicture"
         @click="updatepicture = !updatepicture"
         class="p-1 rounded-md bg-blue-500 text-white"
       >
         Cambiar imagen de perfil
       </button>
-      <div v-else>
+      <div v-else-if="!okpicture">
         <div
           class="relative border border-dashed h-48 bg-blue-100 border-blue-200"
         >
@@ -112,7 +120,7 @@
             </button>
             <div v-else class="absolute bottom-0 flex w-full">
               <button
-                @click="updatepicture()"
+                @click="updatepicturemethod()"
                 class="z-10 w-1/2 p-1 rounded-md bg-blue-500 text-white w-full"
               >
                 Enviar
@@ -131,8 +139,8 @@
             <h1>Imagen actual</h1>
             <img
               class="h-20 w-20 rounded-full"
-              v-if="data.photoURL"
-              :src="data.photoURL"
+              v-if="datauser.photoURL"
+              :src="datauser.photoURL"
               alt=""
             />
           </div>
@@ -147,6 +155,9 @@
           </div>
         </div>
       </div>
+      <div v-if="okpicture" class="p-1 rounded-md bg-green-500 text-white">
+        Imagen actualizada correctamente
+      </div>
     </div>
   </div>
 </template>
@@ -157,7 +168,7 @@ import Vue from "vue";
 export default {
   data() {
     return {
-      data: firebase.auth().currentUser,
+      datauser: firebase.auth().currentUser,
       currentmail: firebase.auth().currentUser.email,
       email: "",
       change: false,
@@ -166,12 +177,15 @@ export default {
       picture: null,
       newpicture: null,
       send: false,
+      oksend: false,
+      okmail: false,
+      okpicture: false,
     };
   },
   methods: {
     reset() {
       const data = {
-        data: firebase.auth().currentUser,
+        datauser: firebase.auth().currentUser,
         currentmail: firebase.auth().currentUser.email,
         email: "",
         change: false,
@@ -180,48 +194,69 @@ export default {
         picture: null,
         newpicture: null,
         send: false,
+        delet: false,
+        oksend: false,
+        okmail: false,
+        okpicture: false,
       };
       Object.assign(this.$data, data);
     },
     updatepassword() {
       firebase
         .auth()
-        .sendPasswordResetEmail(this.data.email)
-        .then(function () {
-          // Email sent.
+        .sendPasswordResetEmail(this.datauser.email)
+        .then(() => {
+          this.oksend = true;
+          setTimeout(() => {
+            this.oksend = !this.oksend;
+          }, 5000);
         })
         .catch(function (error) {
-          // An error happened.
+          console.log(error.message);
         });
     },
     updatemail() {
-      firebase
-        .auth()
-        .currentUser.updateEmail(this.email)
-        .then(() => (this.change = false));
+      this.datauser.updateEmail(this.email).then(() => {
+        setTimeout(() => {
+          this.reset();
+        }, 3000);
+        this.okmail = !this.okmail;
+        setTimeout(() => {
+          this.reset();
+        }, 5000);
+      });
     },
     deleteaccount() {
-      firebase
-        .auth()
-        .currentUser.delete()
-        .then(() => this.$router.replace("/"));
+      let storageRef = firebase.storage().ref(firebase.auth().currentUser.uid);
+      storageRef.delete().then(() => {
+        firebase
+          .auth()
+          .currentUser.delete()
+          .then(() => this.$router.replace("/"));
+      });
     },
     processFile(event) {
       this.picture = event.target.files[0];
       this.newpicture = URL.createObjectURL(this.picture);
       this.send = true;
     },
-    updatepicture() {
+    updatepicturemethod() {
       let storageRef = firebase.storage().ref(firebase.auth().currentUser.uid);
-      storageRef.put(this.picture).then((image) => {
-        this.updatepicture = !this.updatepicture;
+      storageRef.put(this.picture).then(() => {
         storageRef.getDownloadURL().then((url) => {
           firebase.auth().currentUser.updateProfile({
             photoURL: url,
           });
         });
       });
+      this.okpicture = !this.okpicture;
+      setTimeout(() => {
+        this.reset();
+      }, 2000);
     },
+    reautenticar(){
+      
+    }
   },
 };
 </script>
