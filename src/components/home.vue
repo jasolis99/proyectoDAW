@@ -20,7 +20,7 @@
             alt="Your avatar"
           />
           <div v-else class="h-full w-full object-cover bg-white">
-            <span class="text-center uppercase text-2xl" v-text="name"></span>
+            <span class="text-center uppercase text-3xl" v-text="name"></span>
           </div>
         </button>
         <div
@@ -87,13 +87,13 @@ export default {
       user: null,
       auth: false,
       show: false,
-      name: "",
+      name: '',
     };
   },
   created() {
     if (firebase.auth().currentUser) {
       this.user = firebase.auth().currentUser;
-      if (!this.user.displayName) {
+      if (!this.user.photoURL) {
         this.name = this.user.email.charAt(0);
       }
       this.auth = true;
