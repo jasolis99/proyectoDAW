@@ -1,22 +1,22 @@
 <template>
   <div
     id="centro"
-    class="w-2/5 container shadow-md rounded-md bg-white mx-auto px-10 py-5 md:w-2/3"
+    class="w-2/5 container shadow-md rounded-md bg-white mx-auto px-10 py-5 min-w-1200 md:w-2/3"
   >
     <h1 v-if="!registerform" class="text-center text-3xl font-light">
       Iniciar sesión
     </h1>
     <h1 v-else class="text-center text-3xl font-light">Regístrate</h1>
-    <div class="mx-auto mt-2 mb-2 w-1/2 px-5 flex justify-around">
+    <div class="mx-auto mt-2 mb-2 w-1/2 px-5 flex xl:flex-row md:flex-col xl:justify-around md:justify-center">
       <button
         @click="googlelog()"
-        class="w-2/5 p-2 fa fa-google googleico text-white rounded"
+        class="xl:w-2/5 md:w-full p-2 fa fa-google googleico text-white rounded  "
       >
         <span class="p-2">Google</span>
       </button>
       <button
         @click="facebooklog()"
-        class="w-2/5 p-2 fa fa-facebook facebookico text-white rounded"
+        class="xl:w-2/5 md:w-full p-2 fa fa-facebook facebookico text-white rounded md:mt-3 xl:mt-0 "
       >
         <span class="p-2">Facebook</span>
       </button>
@@ -54,8 +54,8 @@
         Iniciar sesión
       </button>
       <p class="text-center">
-        ¿No estás registrado?<span class="p-1" href="#" @click="reset()"
-          >Regístrate</span
+        ¿No estás registrado?<router-link to="/register" class="p-1" href="#"
+          >Regístrate</router-link
         >
       </p>
     </form>
@@ -127,9 +127,8 @@
         Registrarse
       </button>
       <p class="text-center">
-        ¿Tienes cuenta?<span class="p-1" @click="reset()"
-          >Inicia sesión</span
-        >
+        ¿Tienes cuenta?<router-link to = "/login" class="p-1"
+          >Inicia sesión</router-link>
       </p>
     </form>
   </div>
@@ -143,7 +142,6 @@ export default {
   },
   data() {
     return {
-      registerform: false,
       passworderror: false,
       errormessage: null,
       picture: null,
@@ -154,10 +152,12 @@ export default {
       repeat: null,
     };
   },
+  props:[
+    'registerform'
+  ] ,
   methods: {
     reset(){
       const data = {
-        registerform: !this.registerform,
         passworderror: false,
         errormessage: null,
         picture: null,

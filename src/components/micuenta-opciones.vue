@@ -85,6 +85,7 @@
                     Para realizar esta acción debes volver a introducir tus
                     datos por motivos de seguridad
                   </p>
+                  <p v-if="errorsign" v-text="errorsign" class="text-sm text-red-500"></p>
                 </div>
                 <div
                   v-if="datauser.providerData[0].providerId == 'password'"
@@ -113,7 +114,7 @@
         </div>
       </div>
     </div>
-    <div>
+    <div v-if="datauser.providerData[0].providerId == 'password'">
       <h1>Cambio de contraseña</h1>
       <p class="my-3">
         Mantener una contraseña actualizada y segura aumenta la protección de tu
@@ -130,7 +131,7 @@
         Correo enviado correctamente
       </div>
     </div>
-    <div class="my-5">
+    <div v-if="datauser.providerData[0].providerId == 'password'" class="my-5">
       <h1>Cambiar correo electrónico</h1>
       <p class="my-3">
         Para cambiar el correo de la cuenta, pinche en el botón debajo del
@@ -281,7 +282,8 @@ export default {
       okmail: false,
       okpicture: false,
       password: '',
-      modal: false,
+      modal: true,
+      errorsign: null,
     };
   },
   methods: {
@@ -301,6 +303,8 @@ export default {
         okpicture: false,
         password: '',
         modal: false,
+        errorsign: null,
+
       };
       Object.assign(this.$data, data);
     },
@@ -379,19 +383,19 @@ export default {
       // Now you can use that to reauthenticate
       this.datauser.reauthenticateWithCredential(credential).then(()=>{
         this.modal = !this.modal
-      },(error)=>console.log(error));
+      },(error)=>this.errorsign = error.message);
     },
     reauthgoogle(){
       const provider = new firebase.auth.GoogleAuthProvider();
       this.datauser.reauthenticateWithPopup(provider).then(() =>{
         this.modal = !this.modal
-      })
+      },(error)=>this.errorsign = error.message)
     },
     reauthfacebook(){
       const provider = new firebase.auth.FacebookAuthProvider();;
       this.datauser.reauthenticateWithPopup(provider).then(() =>{
         this.modal = !this.modal
-      })
+      },(error)=>this.errorsign = error.message)
     },
   },
 };

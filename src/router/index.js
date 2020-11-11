@@ -29,6 +29,13 @@ const router = new Router({
       path: '/login',
       name: 'Login',
       component: Login,
+      props: {registerform:false}
+    },
+    {
+      path: '/register',
+      name: 'Login',
+      component: Login,
+      props: {registerform: true}
     },
     {
       path: '/micuenta',

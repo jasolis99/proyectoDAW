@@ -4,7 +4,7 @@
       <router-link class="px-2 text-white font-thin text-sm" tag="a" to="/login"
         >Iniciar sesión</router-link
       >
-      <router-link class="px-2 text-white font-thin text-sm" tag="a" to="/login"
+      <router-link class="px-2 text-white font-thin text-sm" tag="a" to="/register"
         >Registro</router-link
       >
     </div>
