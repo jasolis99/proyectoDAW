@@ -12,7 +12,7 @@
       >
     </div>
     <div id="centro" class="flex flex-col items-center">
-      <h1 class="text-white font-bold md: text-sm">¿Qué quieres aprender hoy?</h1>
+      <h1 class="text-white font-bold">¿Qué quieres aprender hoy?</h1>
       <input
         class="w-1/2 rounded-md p-2"
         type="search"

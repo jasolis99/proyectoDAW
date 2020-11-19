@@ -5,7 +5,6 @@ import firebase from 'firebase'
 import App from './App'
 import router from './router'
 import {firebaseConfig} from './firebase-config'
-// import './style/main.css'
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
