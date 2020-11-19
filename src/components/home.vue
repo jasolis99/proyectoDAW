@@ -4,78 +4,43 @@
       <router-link class="px-2 text-white font-thin text-sm" tag="a" to="/login"
         >Iniciar sesión</router-link
       >
-      <router-link class="px-2 text-white font-thin text-sm" tag="a" to="/register"
+      <router-link
+        class="px-2 text-white font-thin text-sm"
+        tag="a"
+        to="/register"
         >Registro</router-link
       >
     </div>
-    <div v-if="auth" class="flex justify-end">
-      <div @click="show = !show" class="relative">
-        <button
-          class="block h-12 w-12 rounded-full overflow-hidden border-2 border-gray-600 focus:outline-none focus:border-white"
-        >
-          <img
-            v-if="user.photoURL"
-            class="h-full w-full object-cover"
-            :src="user.photoURL"
-            alt="Your avatar"
-          />
-          <div v-else class="h-full w-full object-cover bg-white">
-            <span class="text-center uppercase text-3xl" v-text="name"></span>
-          </div>
-        </button>
-        <div
-          v-if="show"
-          class="absolute right-0 mt-2 py-2 w-48 bg-white rounded-lg shadow-xl"
-        >
-          <router-link
-            to="/micuenta"
-            tag="a"
-            href="#"
-            class="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white"
-            >Mi cuenta</router-link
-          >
-          <a
-            @click="logout()"
-            href="#"
-            class="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white"
-            >Cerrar sesión</a
-          >
-        </div>
-      </div>
-    </div>
     <div id="centro" class="flex flex-col items-center">
-      <h1 class="text-white font-bold">¿Qué quieres aprender hoy?</h1>
+      <h1 class="text-white font-bold md: text-sm">¿Qué quieres aprender hoy?</h1>
       <input
         class="w-1/2 rounded-md p-2"
         type="search"
         placeholder="Buscar lección"
         name=""
         id=""
+        v-model="search"
       />
       <div
-        class="w-2/3 bg-white border border-red-200 rounded-md flex justify-around items-center p-3 mt-10"
+        v-for="(value, key) in filterlessons"
+        :key="key"
+        class="w-2/3 bg-white rounded-md flex justify-between items-center p-3 mt-10"
       >
-        <img
-          class="w-1/5 border border-red-200"
-          src="../assets/cuadrado.jpg"
-          alt=""
-        />
-        <p class="p-1 text-xs text-justify">
-          <span class="block text-sm">Título de la lección</span>
-          Esto sería la descripción de la lección que se va a realizar. Donde el
-          alumno podrá leer toda la información necesaria para saber en qué
-          consiste la lección
+        <img class="w-1/5" src="../assets/cuadrado.jpg" alt="" />
+        <p class="w-4/5 p-1 text-sm text-justify">
+          <span class="block text-xl">{{ value.Nombreleccion }}</span>
+          {{ value.Descripcion }}
         </p>
-        <button
-          class="p-1 text-xs text-white bg-green-400 border border-red-200 rounded-md"
+        <router-link
+          v-if="auth"
+          :to="'/leccion/' + value.Id"
+          tag="button"
+          class="p-1 text-xs text-white bg-green-400 rounded-md"
         >
           Comenzar
-        </button>
+        </router-link>
       </div>
     </div>
-    <pre>
-      {{ $data }}
-    </pre>
   </div>
 </template>
 
@@ -87,7 +52,9 @@ export default {
       user: null,
       auth: false,
       show: false,
-      name: '',
+      name: "",
+      search: '',
+      lessons: [],
     };
   },
   created() {
@@ -98,8 +65,32 @@ export default {
       }
       this.auth = true;
     }
+    this.getlessons();
+  },
+  computed: {
+    filterlessons() {
+      return this.lessons.filter((lesson) =>
+        lesson.Nombreleccion.includes(this.search)
+      );
+    },
   },
   methods: {
+    getlessons() {
+      const db = firebase.database();
+      db.ref("/Lecciones").on("value", (snapshot) =>
+        this.loadlessons(snapshot.val())
+      );
+    },
+    loadlessons(obtainedlessons) {
+      for (let key in obtainedlessons) {
+        this.lessons.push({
+          Descripcion: obtainedlessons[key].Descripcion,
+          Nombreleccion: obtainedlessons[key].Nombreleccion,
+          Numerotabla: obtainedlessons[key].Numerotabla,
+          Id: key,
+        });
+      }
+    },
     logout() {
       firebase.auth().signOut();
     },

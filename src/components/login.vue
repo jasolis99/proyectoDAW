@@ -1,13 +1,13 @@
 <template>
   <div
     id="centro"
-    class="w-2/5 container shadow-md rounded-md bg-white mx-auto px-10 py-5 min-w-1200 md:w-2/3"
+    class="w-2/5 container shadow-md rounded-md bg-white mx-auto px-10 py-5 md:px-2 md:py-2 min-w-1200 md:w-2/3"
   >
     <h1 v-if="!registerform" class="text-center text-3xl font-light">
       Iniciar sesión
     </h1>
     <h1 v-else class="text-center text-3xl font-light">Regístrate</h1>
-    <div class="mx-auto mt-2 mb-2 w-1/2 px-5 flex xl:flex-row md:flex-col xl:justify-around md:justify-center">
+    <div class="lg:mx-auto mt-2 mb-2 w-1/2 px-5 md:px-2 flex xl:flex-row md:flex-col xl:justify-around md:justify-center">
       <button
         @click="googlelog()"
         class="xl:w-2/5 md:w-full p-2 fa fa-google googleico text-white rounded  "
@@ -25,7 +25,7 @@
     <form
       @submit.prevent="login()"
       v-if="!registerform"
-      class="mx-auto flex flex-col px-5 justify-between w-1/2"
+      class="lg:mx-auto flex flex-col px-5 md:px-2 justify-between w-1/2 border border-red-200"
     >
       <label for="">Email</label>
       <input
@@ -63,7 +63,7 @@
     <form
       @submit.prevent="register()"
       v-else
-      class="mx-auto flex flex-col px-5 justify-between w-1/2"
+      class="xs:mx-auto flex flex-col px-5 sm:px-2 justify-between w-1/2 xs:w-full"
     >
       <div
         v-if="!picture"
@@ -171,7 +171,7 @@ export default {
 
     },
     googlelog() {
-      var provider = new firebase.auth.GoogleAuthProvider();
+      const provider = new firebase.auth.GoogleAuthProvider();
       firebase
         .auth()
         .signInWithPopup(provider)
@@ -181,7 +181,7 @@ export default {
         );
     },
     facebooklog() {
-      var provider = new firebase.auth.FacebookAuthProvider();
+      const provider = new firebase.auth.FacebookAuthProvider();
       firebase
         .auth()
         .signInWithPopup(provider)

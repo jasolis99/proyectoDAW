@@ -14,7 +14,8 @@
     "firebase-admin": "^9.3.0",
     "tailwindcss": "^1.9.2",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "written-number": "^0.9.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

@@ -17,3 +17,4 @@ yarn-error.log*
 
 src/firebase-config.js
 src/proyecto-daw-eba1d-firebase-adminsdk-wou3o-b71ea1cfcd.json
+.travis.yml

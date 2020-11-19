@@ -7,6 +7,7 @@ import Home from '@/components/home'
 import Micuenta from '@/components/micuenta'
 import Opciones from '@/components/micuenta-opciones'
 import Logros from '@/components/logros'
+import Leccion from '@/components/leccion'
 
 
 // admin components
@@ -41,6 +42,9 @@ const router = new Router({
       path: '/micuenta',
       name: 'Micuenta',
       component: Micuenta,
+      meta:{
+        autentificado: true,
+      },
       children: [
         {path:'/opciones', name: 'Opciones' ,component:Opciones},
         {path:'/logros', name: 'Logros' ,component:Logros},
@@ -55,11 +59,22 @@ const router = new Router({
       path: '/dashboard',
       name: 'Dashboard',
       component: Dashboard,
+      meta: {
+        autentificado: true,
+      },
       children: [
         {path:'/users', name:'Users', component: Usuarios},
         {path:'/lessons', name:'Lessons', component: Lecciones},
       ]
     },
+    {
+      path:'/leccion/:les',
+      name:'Lesson',
+      component:Leccion,
+      meta: {
+        autentificado: true,
+      }
+    }
 
   ]
 })
@@ -70,13 +85,15 @@ router.beforeEach((to, from, next) => {
   // to and from are both route objects. must call `next`.
   let user = firebase.auth().currentUser;
   let auth = to.matched.some(record=>record.meta.autentificado);
-  console.log(user);
   next();
 
-  // if(auth && !user){
-  //   next('Login')
-  // }
-  // else{
-  //   next();
-  // }
+  if(auth && !user){
+    next('Login')
+  }
+  else if (!auth && user){
+    next('/')
+  }
+  else{
+    next();
+  }
 })
