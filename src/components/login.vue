@@ -63,7 +63,7 @@
     <form
       @submit.prevent="register()"
       v-else
-      class="xs:mx-auto flex flex-col px-5 sm:px-2 justify-between w-1/2 xs:w-full"
+      class="mx-auto flex flex-col px-5 justify-between w-1/2"
     >
       <div
         v-if="!picture"

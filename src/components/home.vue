@@ -1,16 +1,5 @@
 <template>
   <div class="container mx-auto">
-    <div v-if="!auth" class="flex justify-end">
-      <router-link class="px-2 text-white font-thin text-sm" tag="a" to="/login"
-        >Iniciar sesión</router-link
-      >
-      <router-link
-        class="px-2 text-white font-thin text-sm"
-        tag="a"
-        to="/register"
-        >Registro</router-link
-      >
-    </div>
     <div id="centro" class="flex flex-col items-center">
       <h1 class="text-white font-bold">¿Qué quieres aprender hoy?</h1>
       <input
