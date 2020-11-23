@@ -37,6 +37,7 @@
             >Mi cuenta</router-link
           >
           <router-link
+            v-if="adminlog"
             to="/dashboard"
             tag="a"
             href="#"
@@ -80,6 +81,7 @@ export default {
       this.auth = true;
       this.user = firebase.auth().currentUser;
     }
+    this.admin()
   },
   data() {
     return {
@@ -87,12 +89,19 @@ export default {
       verified: true,
       auth: false,
       show: false,
+      adminlog: false
     };
   },
   methods: {
+    admin(){
+      if(this.user.uid = 'j2ZZ3o5HWMYawkUIkjMVPoiNngJ3'){
+        this.adminlog = true
+      }
+    },
     logout() {
       firebase.auth().signOut().then(this.$router.replace("/"));
     },
+
   },
 };
 </script>

@@ -13,9 +13,16 @@
 </template>
 
 <script>
+import firebase from 'firebase'
 export default {
   data() {
     return {};
+  },
+  created() {
+    if(firebase.auth().currentUser.uid != 'j2ZZ3o5HWMYawkUIkjMVPoiNngJ3'){
+      // this.$router.replace('/')
+      console.log('No eres admin')
+    }
   },
 };
 </script>

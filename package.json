@@ -12,6 +12,7 @@
   "dependencies": {
     "firebase": "^7.24.0",
     "firebase-admin": "^9.3.0",
+    "heroku": "^7.47.3",
     "tailwindcss": "^1.9.2",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",

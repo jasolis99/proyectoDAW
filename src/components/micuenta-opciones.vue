@@ -85,7 +85,11 @@
                     Para realizar esta acción debes volver a introducir tus
                     datos por motivos de seguridad
                   </p>
-                  <p v-if="errorsign" v-text="errorsign" class="text-sm text-red-500"></p>
+                  <p
+                    v-if="errorsign"
+                    v-text="errorsign"
+                    class="text-sm text-red-500"
+                  ></p>
                 </div>
                 <div
                   v-if="datauser.providerData[0].providerId == 'password'"
@@ -114,64 +118,69 @@
         </div>
       </div>
     </div>
-    <div v-if="datauser.providerData[0].providerId == 'password'">
-      <h1>Cambio de contraseña</h1>
-      <p class="my-3">
-        Mantener una contraseña actualizada y segura aumenta la protección de tu
-        cuenta.
-      </p>
-      <button
-        v-if="!oksend"
-        @click="updatepassword()"
-        class="p-1 rounded-md bg-blue-500 text-white"
-      >
-        Solicitar cambio de contraseña
-      </button>
-      <div v-else class="p-1 rounded-md bg-green-500 text-white">
-        Correo enviado correctamente
+    <div v-if="!updatepicture">
+      <div v-if="datauser.providerData[0].providerId == 'password'">
+        <h1>Cambio de contraseña</h1>
+        <p class="my-3">
+          Mantener una contraseña actualizada y segura aumenta la protección de
+          tu cuenta.
+        </p>
+        <button
+          v-if="!oksend"
+          @click="updatepassword()"
+          class="p-1 rounded-md bg-blue-500 text-white"
+        >
+          Solicitar cambio de contraseña
+        </button>
+        <div v-else class="p-1 rounded-md bg-green-500 text-white">
+          Correo enviado correctamente
+        </div>
       </div>
-    </div>
-    <div v-if="datauser.providerData[0].providerId == 'password'" class="my-5">
-      <h1>Cambiar correo electrónico</h1>
-      <p class="my-3">
-        Para cambiar el correo de la cuenta, pinche en el botón debajo del
-        texto.
-      </p>
-      <button
-        v-if="!change && !okmail"
-        @click="change = !change"
-        class="p-1 rounded-md bg-blue-500 text-white"
+      <div
+        v-if="datauser.providerData[0].providerId == 'password'"
+        class="my-5"
       >
-        Solicitar cambio de correo electrónico
-      </button>
-      <div v-else-if="!okmail">
-        <form @submit.prevent="updatemail()" action="">
-          <input
-            class="block w-2/5 border border-black rounded p-1"
-            type="email"
-            v-model="email"
-            :placeholder="currentmail"
-            name=""
-            id=""
-            required
-          />
-          <button
-            type="submit"
-            class="p-1 rounded-md bg-blue-500 text-white my-2"
-          >
-            Enviar
-          </button>
-          <button
-            type="button"
-            @click="reset()"
-            class="p-1 rounded-md bg-blue-500 text-white my-2"
-          >
-            Cancelar
-          </button>
-        </form>
-      </div>
-      <div v-if="okmail" class="p-1 rounded-md bg-green-500 text-white">
-        Correo cambiado correctamente
+        <h1>Cambiar correo electrónico</h1>
+        <p class="my-3">
+          Para cambiar el correo de la cuenta, pinche en el botón debajo del
+          texto.
+        </p>
+        <button
+          v-if="!change && !okmail"
+          @click="change = !change"
+          class="p-1 rounded-md bg-blue-500 text-white"
+        >
+          Solicitar cambio de correo electrónico
+        </button>
+        <div v-else-if="!okmail">
+          <form @submit.prevent="updatemail()" action="">
+            <input
+              class="block w-2/5 border border-black rounded p-1"
+              type="email"
+              v-model="email"
+              :placeholder="currentmail"
+              name=""
+              id=""
+              required
+            />
+            <button
+              type="submit"
+              class="p-1 rounded-md bg-blue-500 text-white my-2"
+            >
+              Enviar
+            </button>
+            <button
+              type="button"
+              @click="reset()"
+              class="p-1 rounded-md bg-blue-500 text-white my-2"
+            >
+              Cancelar
+            </button>
+          </form>
+        </div>
+        <div v-if="okmail" class="p-1 rounded-md bg-green-500 text-white">
+          Correo cambiado correctamente
+        </div>
       </div>
     </div>
     <div>
@@ -271,7 +280,7 @@ export default {
     return {
       datauser: firebase.auth().currentUser,
       currentmail: firebase.auth().currentUser.email,
-      email: '',
+      email: "",
       change: false,
       updatepicture: false,
       delet: false,
@@ -281,7 +290,7 @@ export default {
       oksend: false,
       okmail: false,
       okpicture: false,
-      password: '',
+      password: "",
       modal: true,
       errorsign: null,
     };
@@ -291,7 +300,7 @@ export default {
       const data = {
         datauser: firebase.auth().currentUser,
         currentmail: firebase.auth().currentUser.email,
-        email: '',
+        email: "",
         change: false,
         updatepicture: false,
         picture: null,
@@ -301,10 +310,9 @@ export default {
         oksend: false,
         okmail: false,
         okpicture: false,
-        password: '',
+        password: "",
         modal: false,
         errorsign: null,
-
       };
       Object.assign(this.$data, data);
     },
@@ -381,21 +389,30 @@ export default {
         this.password
       );
       // Now you can use that to reauthenticate
-      this.datauser.reauthenticateWithCredential(credential).then(()=>{
-        this.modal = !this.modal
-      },(error)=>this.errorsign = error.message);
+      this.datauser.reauthenticateWithCredential(credential).then(
+        () => {
+          this.modal = !this.modal;
+        },
+        (error) => (this.errorsign = error.message)
+      );
     },
-    reauthgoogle(){
+    reauthgoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
-      this.datauser.reauthenticateWithPopup(provider).then(() =>{
-        this.modal = !this.modal
-      },(error)=>this.errorsign = error.message)
+      this.datauser.reauthenticateWithPopup(provider).then(
+        () => {
+          this.modal = !this.modal;
+        },
+        (error) => (this.errorsign = error.message)
+      );
     },
-    reauthfacebook(){
-      const provider = new firebase.auth.FacebookAuthProvider();;
-      this.datauser.reauthenticateWithPopup(provider).then(() =>{
-        this.modal = !this.modal
-      },(error)=>this.errorsign = error.message)
+    reauthfacebook() {
+      const provider = new firebase.auth.FacebookAuthProvider();
+      this.datauser.reauthenticateWithPopup(provider).then(
+        () => {
+          this.modal = !this.modal;
+        },
+        (error) => (this.errorsign = error.message)
+      );
     },
   },
 };

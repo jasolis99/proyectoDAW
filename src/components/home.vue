@@ -15,7 +15,7 @@
         :key="key"
         class="w-2/3 bg-white rounded-md flex justify-between items-center p-3 mt-10"
       >
-        <img class="w-1/5" src="../assets/cuadrado.jpg" alt="" />
+        <p class="w-1/5 text-3xl text-center"> x{{value.Numerotabla}}</p>
         <p class="w-4/5 p-1 text-sm text-justify">
           <span class="block text-xl">{{ value.Nombreleccion }}</span>
           {{ value.Descripcion }}
