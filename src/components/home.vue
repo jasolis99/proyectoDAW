@@ -15,7 +15,7 @@
         :key="key"
         class="w-2/3 bg-white rounded-md flex justify-between items-center p-3 mt-10"
       >
-        <p class="w-1/5 text-3xl text-center"> x{{value.Numerotabla}}</p>
+        <p class="w-1/5 text-6xl text-center text-orange-600 numero"> x{{value.Numerotabla}}</p>
         <p class="w-4/5 p-1 text-sm text-justify">
           <span class="block text-xl">{{ value.Nombreleccion }}</span>
           {{ value.Descripcion }}
@@ -93,6 +93,14 @@ export default {
 @import url(https://fonts.googleapis.com/css?family=Poppins:100,100italic,200,200italic,300,300italic,regular,italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic);
 @import url(https://fonts.googleapis.com/css?family=Chilanka:regular);
 
+@font-face {
+  font-family: "abc";
+  src: url("../assets/abc3D.ttf");
+}
+
+.numero{
+  font-family: "abc";
+}
 p {
   font-family: Open Sans;
 }

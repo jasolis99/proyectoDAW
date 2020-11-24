@@ -5,7 +5,7 @@
         Debes verificar tu cuenta para poder acceder al contenido de la web
       </h3>
     </div>
-    <div class="w-11/12 flex justify-between">
+    <div class="w-11/12 flex justify-between p-3">
       <div>
         <router-link class="px-2 text-white font-thin text-sm" tag="a" to="/"
           >Inicio</router-link

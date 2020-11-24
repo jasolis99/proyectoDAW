@@ -31,7 +31,10 @@
           >
             Modificar
           </button>
-          <button @click="removelesson(value.Id)" class="p-1 bg-red-600 border border-black rounded-md">
+          <button
+            @click="removelesson(value.Id)"
+            class="p-1 bg-red-600 border border-black rounded-md"
+          >
             Borrar
           </button>
         </div>
@@ -50,8 +53,9 @@
         <input
           v-model="lessonnumber"
           required
+          maxlength="2"
           class="border border-black rounded-md w-1/2 p-1"
-          type="text"
+          @blur="checklesson()"
         />
         <label for="">Descripcion</label>
         <textarea
@@ -65,11 +69,18 @@
         ></textarea>
         <div class="flex justify-around w-1/2">
           <button
+            v-if="!modificate && checkbutton"
             class="p-1 rounded-md bg-blue-500 text-white my-2 w-1/3"
             type="submit"
           >
-            <span v-if="!modificate">Enviar</span>
-            <span v-else>Modificar</span>
+            Enviar
+          </button>
+          <button
+            v-if="modificate && checkbutton"
+            class="p-1 rounded-md bg-blue-500 text-white my-2 w-1/3"
+            type="submit"
+          >
+            Modificar
           </button>
           <button
             class="p-1 rounded-md bg-blue-500 text-white my-2 w-1/3"
@@ -97,9 +108,11 @@ export default {
       lessonname: "",
       lessonnumber: "",
       description: "",
-      key: '',
+      key: "",
       search: "",
       lessons: [],
+      checkbutton: true,
+      modnumber: "",
     };
   },
   computed: {
@@ -119,6 +132,8 @@ export default {
       this.key = "";
       this.search = "";
       this.lessons = [];
+      this.checkbutton = true;
+      this.modnumber = "",
       this.getlessons();
     },
     getlessons() {
@@ -141,7 +156,7 @@ export default {
       const db = firebase.database();
       if (!this.modificate) {
         db.ref("/Lecciones")
-          .child("lec"+ this.lessonnumber)
+          .child("lec" + this.lessonnumber)
           .set({
             Descripcion: this.description,
             Nombreleccion: this.lessonname,
@@ -159,22 +174,59 @@ export default {
           .then(this.reset());
       }
     },
+    checklesson() {
+      let cont = 0;
+      if (this.modificate) {
+        if (this.lessonnumber == this.modnumber) {
+          this.checkbutton = true;
+        } else {
+          for (let key in this.lessons) {
+            if (
+              this.lessonnumber == this.lessons[key].Numerotabla &&
+              this.lessonnumber != this.modnumber
+            ) {
+              cont++;
+            }
+          }
+          if (cont > 0) {
+            this.checkbutton = false;
+          } else {
+            this.checkbutton = true;
+          }
+        }
+      } else {
+        for (let key in this.lessons) {
+          if (this.lessonnumber == this.lessons[key].Numerotabla) {
+            cont++;
+          }
+        }
+        if (cont > 0) {
+          this.checkbutton = false;
+        } else {
+          this.checkbutton = true;
+        }
+      }
+    },
     modificatelesson(lesson) {
       this.newlesson = !this.newlesson;
       this.modificate = !this.modificate;
       this.lessonname = lesson.Nombreleccion;
       this.description = lesson.Descripcion;
       this.lessonnumber = lesson.Numerotabla;
-      this.key = lesson.Id
+      this.modnumber = lesson.Numerotabla;
+      this.key = lesson.Id;
     },
-    removelesson(lesson){
-      const db = firebase.database()
+    removelesson(lesson) {
+      const db = firebase.database();
 
-      db.ref("/Lecciones").child(lesson).remove().then(()=>{
-        this.lessons = [];
-        this.getlessons();
-      })
-    }
+      db.ref("/Lecciones")
+        .child(lesson)
+        .remove()
+        .then(() => {
+          this.lessons = [];
+          this.getlessons();
+        });
+    },
   },
 };
 </script>

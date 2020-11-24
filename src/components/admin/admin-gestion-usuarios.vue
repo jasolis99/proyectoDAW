@@ -23,7 +23,10 @@
         >
           Dar de baja
         </button>
-        <button @click="resetpassword(user.email)" class="p-1 border border-black bg-green-400 rounded-md">
+        <button
+          @click="resetpassword(user.email)"
+          class="p-1 border border-black bg-green-400 rounded-md"
+        >
           Cambio de contraseña
         </button>
       </div>
@@ -32,7 +35,7 @@
 </template>
 
 <script>
-import firebase from 'firebase'
+import firebase from "firebase";
 export default {
   data() {
     return {
@@ -41,7 +44,9 @@ export default {
     };
   },
   created() {
-    this.getusers();
+    setInterval(() => {
+      this.getusers();
+    },2000);
   },
   computed: {
     userfilter() {
@@ -53,21 +58,23 @@ export default {
   },
   methods: {
     async getusers() {
-      const response = await fetch("http://localhost:3000/users");
+      const response = await fetch(
+        "https://bakend-daw-project.herokuapp.com/users"
+      );
       this.users = await response.json();
     },
     deleteaccount(uid) {
-      fetch("http://localhost:3000/deleteuser", {
+      fetch("https://bakend-daw-project.herokuapp.com/deleteuser", {
         method: "post",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ uid: uid }),
-      }).then(this.getusers());
+      })
     },
     resetpassword(email) {
-      firebase.auth().sendPasswordResetEmail(email)
+      firebase.auth().sendPasswordResetEmail(email);
     },
   },
 };
