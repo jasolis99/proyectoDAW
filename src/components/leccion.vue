@@ -107,7 +107,9 @@ export default {
       console.log(e);
       let last = e.results.length - 1;
       let text = e.results[last][0].transcript;
-
+      if(text = "una"){
+        text = "uno"
+      }
       this.respuesta = text;
       console.log(this.respuesta);
       this.guess();
@@ -146,7 +148,7 @@ export default {
       }
     },
     startlesson() {
-      if (this.mult <= 10) {
+      if (this.mult <= 3) {
         this.tabla = this.lessons.Numerotabla + " x " + this.mult;
         this.startSpeak();
       } else {
@@ -229,6 +231,7 @@ export default {
         .set({
           Nombreleccion: this.lessons.Nombreleccion,
           Resultado: resultado,
+          Respuestas: this.results
         })
         .then((this.end = true));
     },

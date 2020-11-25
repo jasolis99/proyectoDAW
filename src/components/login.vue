@@ -25,7 +25,7 @@
     <form
       @submit.prevent="login()"
       v-if="!registerform"
-      class="lg:mx-auto flex flex-col px-5 md:px-2 justify-between w-1/2 border border-red-200"
+      class="lg:mx-auto flex flex-col px-5 md:px-2 justify-between w-1/2"
     >
       <label for="">Email</label>
       <input
