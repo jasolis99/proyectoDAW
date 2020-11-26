@@ -37,7 +37,7 @@
             >Mi cuenta</router-link
           >
           <router-link
-            v-if="adminlog"
+            v-if="adminlog == true"
             to="/dashboard"
             tag="a"
             href="#"
@@ -80,8 +80,8 @@ export default {
       this.verified = firebase.auth().currentUser.emailVerified;
       this.auth = true;
       this.user = firebase.auth().currentUser;
+      this.admin()
     }
-    this.admin()
   },
   data() {
     return {
@@ -94,7 +94,7 @@ export default {
   },
   methods: {
     admin(){
-      if(this.user.uid = 'j2ZZ3o5HWMYawkUIkjMVPoiNngJ3'){
+      if(this.user.email == 'josealbertosolis99@gmail.com'){
         this.adminlog = true
       }
     },

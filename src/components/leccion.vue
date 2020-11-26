@@ -226,7 +226,7 @@ export default {
       }
 
       db.ref("/Logros")
-        .child(firebase.auth().currentUser.uid)
+        .child(firebase.auth().currentUser.email)
         .child(this.$route.params.les)
         .set({
           Nombreleccion: this.lessons.Nombreleccion,

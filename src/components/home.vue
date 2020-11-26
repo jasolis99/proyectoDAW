@@ -30,6 +30,7 @@
         </router-link>
       </div>
     </div>
+    <pre>{{$data}}</pre>
   </div>
 </template>
 

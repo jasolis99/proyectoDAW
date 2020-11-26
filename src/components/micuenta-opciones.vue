@@ -379,7 +379,7 @@ export default {
           this.reauthgoogle();
           break;
 
-        default:
+        case "facebook.com":
           this.reauthfacebook();
       }
     },
