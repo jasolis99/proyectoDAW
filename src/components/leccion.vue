@@ -46,17 +46,17 @@
       </div>
       <div v-if="startbuttons" class="flex justify-around">
         <button
-          class="text-white border border-white rounded p-1"
+          class="text-white text-xl border border-white rounded p-1"
           @click="startlesson()"
         >
           SEGUIR
         </button>
-        <button class="text-white border border-white rounded p-1" @click ="reset()">
+        <button class="text-white text-xl border border-white rounded p-1" @click ="reset()">
           Reintentar desde el principio
         </button>
       </div>
       <div v-if="end" class="flex justify-center">
-        <button @click="endlesson()" class="text-white border border-white rounded p-1">
+        <button @click="endlesson()" class="text-white text-xl border border-white rounded p-1">
           Finalizar
         </button>
       </div>
@@ -93,6 +93,14 @@ export default {
     this.dictionary();
     this.getlessons();
   },
+  /**
+   * @description
+   * 
+   * Mounted componente leccion.vue
+   * 
+   * Cuando la instancia Vue es montada configura todo lo necesario para poder 
+   * ejecutar el speech recognition.
+   */
   mounted() {
     recognition.maxAlternatives = 1;
     recognition.interimResults = false;
@@ -107,7 +115,7 @@ export default {
       console.log(e);
       let last = e.results.length - 1;
       let text = e.results[last][0].transcript;
-      if(text = "una"){
+      if(text == "una"){
         text = "uno"
       }
       this.respuesta = text;
@@ -121,6 +129,15 @@ export default {
     });
   },
   methods: {
+    /**
+     * @description
+     * En este método se crea un array que almacena el nombre del número y el número perteneciente 
+     * nada más montarse la instancia Vue. 
+     * Esto se crea debido a que el speech recognition no reconoce como número los comprendidos entre 1 y 8. Lo
+     * reconoce como una string de su nombre. 
+     * Cuando mencionamos un número de estos en cualquier lección lo transforma de nombre a número comprobándolo
+     * en el array creado para poder comprobar dicho número mencionado en el speech.
+     */
     dictionary() {
       const writtenNumber = require("written-number");
 
@@ -132,11 +149,19 @@ export default {
         });
       }
     },
+    /**
+     * @description
+     * Este método oculta el botón de comenzar lección y da lugar al comienzo de la lección con una cuenta atrás.
+     */
     startall() {
       this.startbuttons = true
       this.start = !this.start;
       this.countdown();
     },
+    /**
+     * @description
+     * Método que da comienzo a la cuenta atrás. Una vez terminada, comienza lección.
+     */
     countdown() {
       if (this.tabla > 0) {
         setTimeout(() => {
@@ -147,6 +172,11 @@ export default {
         this.startlesson();
       }
     },
+    /**
+     * @description
+     * Método que comienza la lección en sí. Una vez que llega el contador a 10, se muestra el resultado y lo
+     * sube a la base de datos.
+     */
     startlesson() {
       if (this.mult <= 3) {
         this.tabla = this.lessons.Numerotabla + " x " + this.mult;
@@ -155,11 +185,21 @@ export default {
         this.updateresult();
       }
     },
+    /**
+     * @description
+     * Método que da comienzo al speech recognition. Se empieza a hablar y los eventos montados en la instancia Vue
+     * comienzan a dar lugar al reconocimiento de voz.
+     */
     startSpeak() {
       recognition.lang = "es-ES";
       recognition.start();
       console.log("empieza");
     },
+    /**
+     * @description
+     * Método que comprueba la respuesta del usuario a la multiplicación. Una vez comprobado muestra 
+     * un mensaje en pantalla indicando el resultado dicho por voz.
+     */
     guess() {
       if (this.lessons.Numerotabla * this.mult == this.respuesta) {
         this.aciertos++;
@@ -186,6 +226,11 @@ export default {
       this.mult++;
       this.button = true;
     },
+    /**
+     * @description
+     * Método que guarda el resultado de nuestra respuesta en el array que guardaremos en la base de datos para poder
+     * consultarse en cualquier momento.
+     */
     saveresult() {
       let check = "";
       if (this.lessons.Numerotabla * this.mult == this.respuesta) {
@@ -200,6 +245,11 @@ export default {
         result: check,
       });
     },
+    /**
+     * @description
+     * Método ejecutado una vez se monta la instancia Vue. Obtiene de la base de datos la lección que desea 
+     * el usuario realizar.
+     */
     getlessons() {
       const db = firebase.database();
       db.ref("/Lecciones/" + this.$route.params.les).on(
@@ -207,6 +257,10 @@ export default {
         (snapshot) => (this.lessons = snapshot.val())
       );
     },
+    /**
+     * @description
+     * Método que una vez finalizada la lección, subirá el resultado de dicha lección en la base de datos.
+     */
     updateresult() {
       let resultado = "";
       const db = firebase.database();
@@ -226,7 +280,7 @@ export default {
       }
 
       db.ref("/Logros")
-        .child(firebase.auth().currentUser.email)
+        .child(firebase.auth().currentUser.uid)
         .child(this.$route.params.les)
         .set({
           Nombreleccion: this.lessons.Nombreleccion,
@@ -235,6 +289,11 @@ export default {
         })
         .then((this.end = true));
     },
+    /**
+     * @description
+     * Método empleado para reiniciar la lección en caso deseado. Reinicia todas las variables a su estado inicial. 
+     * De esta manera se evita recargar el componente.
+     */
     reset() {
       const data = {
         tabla: 3,
@@ -251,9 +310,17 @@ export default {
       };
       Object.assign(this.$data, data)
     },
+    /**
+     * @description
+     * Método que nos devuelve a la pantalla de Home una vez finalizada la lección
+     */
     endlesson(){
       this.$router.replace("/")
     },
+    /**
+     * @description
+     * Método que cierra sesión de la aplicación.
+     */
     logout() {
       firebase
         .auth()

@@ -10,15 +10,16 @@
     <div class="lg:mx-auto mt-2 mb-2 w-1/2 px-5 md:px-2 flex xl:flex-row md:flex-col xl:justify-around md:justify-center">
       <button
         @click="googlelog()"
-        class="xl:w-2/5 md:w-full p-2 fa fa-google googleico text-white rounded  "
+        class="xl:w-2/5 p-1 md:w-full googleico flex items-center text-white border border-black rounded  "
       >
-        <span class="p-2">Google</span>
+        <span class="w-3/12 h-full flex justify-center rounded items-center bg-white"><img class="w-1/2" src="../assets/googleico.png" alt=""></span>
+        <span class="w-full p-2 text-sm text-black">Sign in with Google</span>
       </button>
       <button
         @click="facebooklog()"
-        class="xl:w-2/5 md:w-full p-2 fa fa-facebook facebookico text-white rounded md:mt-3 xl:mt-0 "
+        class="xl:w-2/5 md:w-full p-1 fa fa-facebook facebookico text-white rounded md:mt-3 xl:mt-0 "
       >
-        <span class="p-2">Facebook</span>
+        <span class="p-2 text-sm">Sign in with Facebook</span>
       </button>
     </div>
 
@@ -27,19 +28,19 @@
       v-if="!registerform"
       class="lg:mx-auto flex flex-col px-5 md:px-2 justify-between w-1/2"
     >
-      <label for="">Email</label>
+      <label for="email">Email</label>
       <input
         class="bg-gray-400 rounded px-2 py-2"
         type="email"
-        name=""
+        name="email"
         v-model="mail"
         required
       />
-      <label for="">Contraseña</label>
+      <label for="pass">Contraseña</label>
       <input
         class="bg-gray-400 rounded px-2 py-2"
         type="password"
-        name=""
+        name="pass"
         v-model="password"
         required
       />
@@ -79,35 +80,35 @@
       <div v-else class="mx-auto h-20 w-20 rounded-full border border-black">
         <img class="w-full h-full rounded-full" :src="showpicture" />
       </div>
-      <label for="">Nombre y Apellido</label>
+      <label for="nombre">Nombre y Apellido</label>
       <input
         class="bg-gray-400 rounded px-2 py-2"
         type="text"
-        name=""
+        name="nombre"
         v-model="displayName"
         required
       />
-      <label for="">Email</label>
+      <label for="email">Email</label>
       <input
         class="bg-gray-400 rounded px-2 py-2"
         type="email"
-        name=""
+        name="email"
         v-model="mail"
         required
       />
-      <label for="">Contraseña</label>
+      <label for="pass">Contraseña</label>
       <input
         class="bg-gray-400 rounded px-2 py-2"
         type="password"
-        name=""
+        name="pass"
         v-model="password"
         required
       />
-      <label for="">Repite contraseña</label>
+      <label for="repit">Repite contraseña</label>
       <input
         class="bg-gray-400 rounded px-2 py-2"
         type="password"
-        name=""
+        name="repit"
         v-model="repeat"
         @keyup="checkpassword()"
         required
@@ -137,9 +138,6 @@
 <script>
 import firebase from "firebase";
 export default {
-  created() {
-    if (firebase.auth().currentUser) this.$router.replace("/");
-  },
   data() {
     return {
       passworderror: false,
@@ -156,6 +154,12 @@ export default {
     'registerform'
   ] ,
   methods: {
+    /**
+     * @description
+     * Componente login.vue
+     * 
+     * Método para vaciar formularios en caso de iniciar sesión para evitar filtramiento de datos.
+     */
     reset(){
       const data = {
         passworderror: false,
@@ -170,6 +174,10 @@ export default {
       Object.assign(this.$data, data);
 
     },
+    /**
+     * @description
+     * Método empleado para iniciar sesión o registrarse con la plataforma de Google.
+     */
     googlelog() {
       const provider = new firebase.auth.GoogleAuthProvider();
       firebase
@@ -180,6 +188,10 @@ export default {
           (error) => console.log(error)
         );
     },
+    /**
+     * @description
+     * Método empleado para iniciar sesión o registrarse con la plataforma de Facebook.
+     */
     facebooklog() {
       const provider = new firebase.auth.FacebookAuthProvider();
       firebase
@@ -191,6 +203,10 @@ export default {
         );
     },
 
+    /**
+     * @description
+     * Método para iniciar sesión en la aplicación con correo y contraseña.
+     */
     login() {
       firebase
         .auth()
@@ -205,11 +221,21 @@ export default {
           }
         );
     },
+    /**
+     * @description
+     * Proceso para poder visualizar la imagen elegida del usuario en la aplicación.
+     * @param {array} event
+     * Array con el resultado del evento al cargar la imagen en el input
+     */
     processFile(event) {
       this.picture = event.target.files[0];
       this.showpicture = URL.createObjectURL(this.picture);
     },
 
+    /**
+     * @description
+     * Método para registrarse con correo y contraseña en la aplicación.
+     */
     register() {
       if (this.password == this.repeat) {
         firebase
@@ -233,6 +259,11 @@ export default {
           );
       }
     },
+    /**
+     * @description
+     * Método llamado para cargar la imagen de perfil de usuario en la base de datos una vez se registre. 
+     * Guarda la imagen en Firestore y se guarda la url de ésta en la información del usuario.
+     */
     uploadpicture() {
       let storageRef = firebase.storage().ref(firebase.auth().currentUser.uid);
       storageRef.put(this.picture).then((image) => {
@@ -243,6 +274,10 @@ export default {
         });
       });
     },
+    /**
+     * @description
+     * Método que comprueba si la contraseña introducida es la misma que la del campo repetir contraseña.
+     */
     checkpassword() {
       if (this.password != this.repeat) {
         this.passworderror = true;
@@ -250,6 +285,11 @@ export default {
         this.passworderror = false;
       }
     },
+    /**
+     * @description
+     * Método llamado una vez registrado en la base de datos. Manda un correo de verificación de cuenta
+     * para poder acceder a todas las lecciones.
+     */
     emailverification() {
       firebase.auth().currentUser.sendEmailVerification();
     },
@@ -265,18 +305,19 @@ export default {
 @import url(https://fonts.googleapis.com/css?family=Montserrat:100,100italic,200,200italic,300,300italic,regular,italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic);
 @import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css);
 .facebookico {
-  background-color: #1877f2;
+  background-color: #4267B2;
 }
 
 .googleico {
-  background-color: #ed1c24;
+  background-color: white;
+
 }
 label,
 h1 {
   font-family: Montserrat;
 }
 
-button,
+span,
 input {
   font-family: Arial, Helvetica, sans-serif;
 }

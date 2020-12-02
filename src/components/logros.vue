@@ -2,7 +2,7 @@
   <div>
     <h1>Logros conseguidos</h1>
     <div v-if="results">
-      <button @click="results=null" class="my-3 p-1 bg-blue-400 rounded text-white">Volver</button>
+      <button @click="results=null" class="my-3 p-1 bg-blue-700 rounded text-white">Volver</button>
       <table>
         <tr class="border">
           <td class="p-2 border">Multiplicación</td>
@@ -44,6 +44,7 @@
 </template>
 
 <script>
+
 import firebase from "firebase";
 export default {
   data() {
@@ -57,12 +58,23 @@ export default {
     this.getachievements();
   },
   methods: {
+    /**
+     * @description
+     * Método llamado una vez creada la instancia Vue que obtiene de la base de datos 
+     * los logros del usuario registrado.
+     */
     getachievements() {
       const db = firebase.database();
       db.ref("/Logros")
         .child(this.user.uid)
         .on("value", (snapshot) => (this.achievements = snapshot.val()));
     },
+    /**
+     * @description
+     * Método que devuelve el resultado obtenido en esa lección para poder consultarlo. 
+     * @param {array} lesson
+     * Array con la lección elegida para obtener resultado. 
+     */
     seeresults(lesson) {
       const db = firebase.database();
       db.ref("/Logros")

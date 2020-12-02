@@ -24,7 +24,7 @@
           v-if="auth"
           :to="'/leccion/' + value.Id"
           tag="button"
-          class="p-1 text-xs text-white bg-green-400 rounded-md"
+          class="p-1 text-md text-white bg-green-700 rounded-md"
         >
           Comenzar
         </router-link>
@@ -36,6 +36,11 @@
 <script>
 import firebase from "firebase";
 export default {
+  /**
+   * @description
+   * Todas las variables usadas en el componente.
+   */
+
   data() {
     return {
       user: null,
@@ -46,17 +51,30 @@ export default {
       lessons: [],
     };
   },
+  /**
+   * @description
+   * Created Home.vue
+   * 
+   * Al crearse la instancia Vue en el componente, comprobamos si el usuario está autenticado o no.
+   * Si está autenticado, cargamos en la variable user el objeto devuelto con la información del usuario
+   * autenticado. Obtenemos igualmente estemos autenticados o no el listado de todas lecciones existentes en la 
+   * aplicación
+   */
   created() {
     if (firebase.auth().currentUser) {
       this.user = firebase.auth().currentUser;
-      if (!this.user.photoURL) {
-        this.name = this.user.email.charAt(0);
-      }
       this.auth = true;
     }
     this.getlessons();
   },
   computed: {
+    /**
+     * @description
+     * Filterlessons nos filtrará las lecciones según coincida su título respecto al input de buscar lecciones.
+     * La búsqueda se realiza en el array que contiene las lecciones obtenidas de la base de datos.
+     * @returns {array}
+     * Array resultante de la búsqueda realizada
+     */
     filterlessons() {
       return this.lessons.filter((lesson) =>
         lesson.Nombreleccion.includes(this.search)
@@ -64,12 +82,23 @@ export default {
     },
   },
   methods: {
+    /**
+     * @description
+     * Getlessons es el método que conecta con la base de datos y nos devuelve las lecciones creadas.
+     */
     getlessons() {
       const db = firebase.database();
       db.ref("/Lecciones").on("value", (snapshot) =>
         this.loadlessons(snapshot.val())
       );
     },
+    /**
+     * @description
+     * Loadlessons es el método encargado de obtener el array resultado del método getlessons y lo carga en otro que creamos
+     * con el que cargaremos las lecciones en el componente y en el que realizaremos la búsqueda de dichas lecciones
+     * @param {array} obtainedlessons
+     * Array con las lecciones obtenidas
+     */
     loadlessons(obtainedlessons) {
       for (let key in obtainedlessons) {
         this.lessons.push({
@@ -80,6 +109,10 @@ export default {
         });
       }
     },
+    /**
+     * @description
+     * Método con el que cerramos la sesión del usuario.
+     */
     logout() {
       firebase.auth().signOut();
     },

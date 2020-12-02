@@ -24,7 +24,7 @@
                   Darse de baja
                 </h3>
                 <div class="mt-2">
-                  <p class="text-sm leading-5 text-gray-500">
+                  <p class="text-sm leading-5 text-gray-700">
                     ¿Estás seguro de ello? Todos los datos serán eliminados y no
                     se podrán recuperar
                   </p>
@@ -37,7 +37,7 @@
               <button
                 @click="deleteaccount()"
                 type="button"
-                class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-red-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+                class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-red-700 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5"
               >
                 Aceptar
               </button>
@@ -81,7 +81,7 @@
                   Introducir contraseña
                 </h3>
                 <div class="mt-2">
-                  <p class="text-sm leading-5 text-gray-500">
+                  <p class="text-sm leading-5 text-gray-700">
                     Para realizar esta acción debes volver a introducir tus
                     datos por motivos de seguridad
                   </p>
@@ -109,7 +109,7 @@
               <button
                 @click="reauth()"
                 type="button"
-                class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+                class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-700 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5"
               >
                 Aceptar
               </button>
@@ -128,11 +128,11 @@
         <button
           v-if="!oksend"
           @click="updatepassword()"
-          class="p-1 rounded-md bg-blue-500 text-white"
+          class="p-1 rounded-md bg-blue-700 text-white"
         >
           Solicitar cambio de contraseña
         </button>
-        <div v-else class="p-1 rounded-md bg-green-500 text-white">
+        <div v-else class="p-1 rounded-md bg-green-700 text-white">
           Correo enviado correctamente
         </div>
       </div>
@@ -148,7 +148,7 @@
         <button
           v-if="!change && !okmail"
           @click="change = !change"
-          class="p-1 rounded-md bg-blue-500 text-white"
+          class="p-1 rounded-md bg-blue-700 text-white"
         >
           Solicitar cambio de correo electrónico
         </button>
@@ -189,7 +189,7 @@
       <button
         v-if="!updatepicture && !okpicture"
         @click="updatepicture = !updatepicture"
-        class="p-1 rounded-md bg-blue-500 text-white"
+        class="p-1 rounded-md bg-blue-700 text-white"
       >
         Cambiar imagen de perfil
       </button>
@@ -211,20 +211,20 @@
             <button
               v-if="!send"
               @click="reset()"
-              class="z-10 absolute bottom-0 p-1 rounded-md bg-blue-500 text-white w-full"
+              class="z-10 absolute bottom-0 p-1 rounded-md bg-blue-700 text-white w-full"
             >
               Cancelar
             </button>
             <div v-else class="absolute bottom-0 flex w-full">
               <button
                 @click="updatepicturemethod()"
-                class="z-10 w-1/2 p-1 rounded-md bg-blue-500 text-white w-full"
+                class="z-10 w-1/2 p-1 rounded-md bg-blue-700 text-white w-full"
               >
                 Enviar
               </button>
               <button
                 @click="reset()"
-                class="z-10 w-1/2 p-1 rounded-md bg-blue-500 text-white w-full"
+                class="z-10 w-1/2 p-1 rounded-md bg-blue-700 text-white w-full"
               >
                 Cancelar
               </button>
@@ -264,7 +264,7 @@
       </p>
       <button
         @click="delet = !delet"
-        class="p-1 rounded-md bg-red-600 text-white"
+        class="p-1 rounded-md bg-red-700 text-white"
       >
         Darse de baja
       </button>
@@ -296,6 +296,13 @@ export default {
     };
   },
   methods: {
+    /**
+     * @description
+     * Componente micuenta-opciones.vue
+     * 
+     * Método llamado para resetear todas las variables una vez finalizada cualquier opción y volver al estado
+     * inicial del componente sin necesidad de recargar página.
+     */
     reset() {
       const data = {
         datauser: firebase.auth().currentUser,
@@ -316,6 +323,10 @@ export default {
       };
       Object.assign(this.$data, data);
     },
+    /**
+     * @description
+     *  Método que manda un correo electrónico para poder cambiar la contraseña del usuario registrado. 
+     */
     updatepassword() {
       firebase
         .auth()
@@ -330,17 +341,22 @@ export default {
           console.log(error);
         });
     },
+    /**
+     * @description
+     * Método para poder cambiar el correo electrónico del usuario registrado.
+     */
     updatemail() {
       this.datauser.updateEmail(this.email).then(() => {
-        setTimeout(() => {
-          this.reset();
-        }, 3000);
         this.okmail = !this.okmail;
         setTimeout(() => {
           this.reset();
         }, 5000);
       });
     },
+    /**
+     * @description
+     * Método que dará de baja al usuario registrado. Una vez finalizado se le devuelve a la pantalla Home.
+     */
     deleteaccount() {
       let storageRef = firebase.storage().ref(firebase.auth().currentUser.uid);
       storageRef.delete().then(() => {
@@ -350,11 +366,22 @@ export default {
           .then(() => this.$router.replace("/"));
       });
     },
+    /**
+     * @description
+     * Proceso para poder visualizar la imagen elegida del usuario en la aplicación.
+     * @param {array} event
+     * Array con el resultado del evento al cargar la imagen en el input
+     */
     processFile(event) {
       this.picture = event.target.files[0];
       this.newpicture = URL.createObjectURL(this.picture);
       this.send = true;
     },
+    /**
+     * @description
+     * Método llamado para cargar la imagen de perfil de usuario en la base de datos. 
+     * Guarda la imagen en Firestore y se guarda la url de ésta en la información del usuario.
+     */
     updatepicturemethod() {
       let storageRef = firebase.storage().ref(firebase.auth().currentUser.uid);
       storageRef.put(this.picture).then(() => {
@@ -369,6 +396,13 @@ export default {
         this.reset();
       }, 2000);
     },
+    /**
+     * @description
+     * Método ejecutado para reautenticarse en la aplicación. Esto es debido a que Firebase requiere
+     * que antes de hacer cambios en la cuenta de los usuarios, éstos se tengan que reautenticar para
+     * verificar que son ellos los que están accediendo a estas opciones. Dependiendo del proveedor de registro
+     * de cada usuario, llamará al método adecuado para reautenticarse.
+     */
     reauth() {
       switch (this.datauser.providerData[0].providerId) {
         case "password":
@@ -383,12 +417,15 @@ export default {
           this.reauthfacebook();
       }
     },
+    /**
+     * @description
+     * Método para reautenticar para aquellos usuarios que se registraron con correo y contraseña.
+     */
     reauthpass() {
       const credential = firebase.auth.EmailAuthProvider.credential(
         this.datauser.email,
         this.password
       );
-      // Now you can use that to reauthenticate
       this.datauser.reauthenticateWithCredential(credential).then(
         () => {
           this.modal = !this.modal;
@@ -396,6 +433,10 @@ export default {
         (error) => (this.errorsign = error.message)
       );
     },
+    /**
+     * @description
+     * Método para reautenticar a aquellos usuarios registrados con Google.
+     */
     reauthgoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
       this.datauser.reauthenticateWithPopup(provider).then(
@@ -405,6 +446,10 @@ export default {
         (error) => (this.errorsign = error.message)
       );
     },
+    /**
+     * @description
+     * Método para reautenticar a aquellos usuarios registrados con Facebook.
+     */
     reauthfacebook() {
       const provider = new firebase.auth.FacebookAuthProvider();
       this.datauser.reauthenticateWithPopup(provider).then(

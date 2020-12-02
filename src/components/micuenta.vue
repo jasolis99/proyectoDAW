@@ -16,9 +16,6 @@
 <script>
 import firebase from 'firebase'
 export default {
-  data() {
-    return {}
-  },
   methods: {
     logout() {
       firebase.auth().signOut().then(()=>this.$router.replace("/"));

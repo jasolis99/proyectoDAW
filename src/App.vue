@@ -1,13 +1,8 @@
 <template>
   <div id="app" class="fondo h-screen">
-    <div v-if="!verified" class="mx-auto w-1/2 bg-orange-300">
-      <h3 class="text-center">
-        Debes verificar tu cuenta para poder acceder al contenido de la web
-      </h3>
-    </div>
-    <div class="w-11/12 flex justify-between p-3">
+    <div class="w-full flex justify-between items-center p-3 bg-gray-800">
       <div>
-        <router-link class="px-2 text-white font-thin text-sm" tag="a" to="/"
+        <router-link class="px-2 text-white font-thin text-md" tag="a" to="/"
           >Inicio</router-link
         >
       </div>
@@ -54,13 +49,13 @@
       </div>
       <div v-else class="flex justify-end">
         <router-link
-          class="px-2 text-white font-thin text-sm"
+          class="px-2 text-white font-thin text-md"
           tag="a"
           to="/login"
           >Iniciar sesión</router-link
         >
         <router-link
-          class="px-2 text-white font-thin text-sm"
+          class="px-2 text-white font-thin text-md"
           tag="a"
           to="/register"
           >Registro</router-link
@@ -77,31 +72,31 @@ export default {
   name: "App",
   created() {
     if (firebase.auth().currentUser) {
-      this.verified = firebase.auth().currentUser.emailVerified;
       this.auth = true;
       this.user = firebase.auth().currentUser;
-      this.admin()
+      if (!this.user.photoURL) {
+        this.name = this.user.email.charAt(0);
+      }
+      this.admin();
     }
   },
   data() {
     return {
       user: null,
-      verified: true,
       auth: false,
       show: false,
-      adminlog: false
+      adminlog: false,
     };
   },
   methods: {
-    admin(){
-      if(this.user.email == 'josealbertosolis99@gmail.com'){
-        this.adminlog = true
+    admin() {
+      if (this.user.email == "josealbertosolis99@gmail.com") {
+        this.adminlog = true;
       }
     },
     logout() {
       firebase.auth().signOut().then(this.$router.replace("/"));
     },
-
   },
 };
 </script>

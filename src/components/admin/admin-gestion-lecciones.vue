@@ -96,6 +96,7 @@
 </template>
 
 <script>
+
 import firebase from "firebase";
 export default {
   created() {
@@ -116,6 +117,11 @@ export default {
     };
   },
   computed: {
+    /**
+     * @description
+     * Devuelve un array con las lecciones que coincidan con la búsqueda deseada
+     * @returns {array}
+     */
     filterlessons() {
       return this.lessons.filter((lesson) =>
         lesson.Nombreleccion.includes(this.search)
@@ -123,6 +129,10 @@ export default {
     },
   },
   methods: {
+    /**
+     * @description
+     * Devuelve las variables a su estado original sin tener que volver a recargar la página.
+     */
     reset() {
       this.newlesson = false;
       this.modificate = false;
@@ -136,12 +146,24 @@ export default {
       this.modnumber = "",
       this.getlessons();
     },
+    /**
+     * @description
+     * Obtiene todas las lecciones de la base de datos
+     */
     getlessons() {
       const db = firebase.database();
       db.ref("/Lecciones").on("value", (snapshot) =>
         this.loadlessons(snapshot.val())
       );
     },
+    /**
+     * @description
+     * Crea un array con el resultado obtenido que nos permitirá poder realizar búsquedas de lecciones
+     * en el componente
+     * 
+     * @param {any} obtainedlessons
+     * Lecciones obtenidas de la base de datos
+     */
     loadlessons(obtainedlessons) {
       for (let key in obtainedlessons) {
         this.lessons.push({
@@ -152,6 +174,10 @@ export default {
         });
       }
     },
+    /**
+     * @description
+     * Método que nos permitirá crear lecciones y modificar según hayamos elegido.
+     */
     createlesson() {
       const db = firebase.database();
       if (!this.modificate) {
@@ -174,6 +200,10 @@ export default {
           .then(this.reset());
       }
     },
+    /**
+     * @description
+     * Método que comprueba si la lección que vayamos a crear o modificar ya está en la base de datos o no. 
+     */
     checklesson() {
       let cont = 0;
       if (this.modificate) {
@@ -207,6 +237,13 @@ export default {
         }
       }
     },
+    /**
+     * @description
+     * Método que rellena el formulario de la modificación de lecciones cuando vayamos a modificar alguna con sus
+     * datos actuales para facilitar la operación.
+     * @param {array} lesson
+     * Array con los datos de la lección a modificar.
+     */
     modificatelesson(lesson) {
       this.newlesson = !this.newlesson;
       this.modificate = !this.modificate;
@@ -216,6 +253,13 @@ export default {
       this.modnumber = lesson.Numerotabla;
       this.key = lesson.Id;
     },
+    /**
+     * @description
+     * Método que nos permitirá borrar lecciones.
+     * @param {array} lesson
+     * Array con los datos de la lección a borrar.
+     * 
+     */
     removelesson(lesson) {
       const db = firebase.database();
 

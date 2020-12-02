@@ -37,6 +37,7 @@
 <script>
 import firebase from "firebase";
 export default {
+
   data() {
     return {
       users: null,
@@ -46,9 +47,15 @@ export default {
   created() {
     setInterval(() => {
       this.getusers();
-    },2000);
+    }, 2000);
   },
   computed: {
+    /**
+     * @description
+     * Método que nos permitirá filtrar usuarios según nuestra búsqueda.
+     * @returns {array}
+     * Array con el array de usuarios filtrados.
+     */
     userfilter() {
       if (this.users)
         return this.users.filter((userdata) =>
@@ -57,12 +64,24 @@ export default {
     },
   },
   methods: {
+    /**
+     * @description
+     * Obtiene los usuarios registrados en la plataforma. 
+     * Conecta con nuestro servidor node.js y obtiene los datos
+     */
     async getusers() {
       const response = await fetch(
         "https://bakend-daw-project.herokuapp.com/users"
       );
       this.users = await response.json();
     },
+    /**
+     * @description
+     * Método para dar de baja a un usuario. Conecta con nuestro servirdor node.js
+     * y éste eliminará el usuario con el uid indicado. 
+     * @param {array} uid
+     * Array con los datos del usuario.
+     */
     deleteaccount(uid) {
       fetch("https://bakend-daw-project.herokuapp.com/deleteuser", {
         method: "post",
@@ -71,8 +90,14 @@ export default {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ uid: uid }),
-      })
+      });
     },
+    /**
+     * @description
+     * Método para enviar correo de cambio de contraseña a un usuario
+     * @param {any} email
+     * Email del usuario a enviar el correo
+     */
     resetpassword(email) {
       firebase.auth().sendPasswordResetEmail(email);
     },
