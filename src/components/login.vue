@@ -10,7 +10,7 @@
     <div class="lg:mx-auto mt-2 mb-2 w-1/2 px-5 md:px-2 flex xl:flex-row md:flex-col xl:justify-around md:justify-center">
       <button
         @click="googlelog()"
-        class="xl:w-2/5 p-1 md:w-full googleico flex items-center text-white border border-black rounded  "
+        class="xl:w-2/5 p-1 md:w-full bg-white flex items-center text-white border border-black rounded  "
       >
         <span class="w-3/12 h-full flex justify-center rounded items-center bg-white"><img class="w-1/2" src="../assets/googleico.png" alt=""></span>
         <span class="w-full p-2 text-sm text-black">Sign in with Google</span>
@@ -306,11 +306,6 @@ export default {
 @import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css);
 .facebookico {
   background-color: #4267B2;
-}
-
-.googleico {
-  background-color: #FFF;
-
 }
 label,
 h1 {
