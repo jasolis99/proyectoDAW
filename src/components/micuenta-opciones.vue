@@ -359,15 +359,13 @@ export default {
      */
     deleteaccount() {
       let storageRef = firebase.storage().ref(firebase.auth().currentUser.uid);
-      firebase.database().ref('Logros/'+firebase.auth().currentUser.uid).remove().then(()=>{
-        storageRef.delete().then(() => {
-          firebase
-            .auth()
-            .currentUser.delete()
-            .then(() => this.$router.replace("/"));
-        });
-      })
-
+      firebase.database().ref('Logros/'+firebase.auth().currentUser.uid)
+      storageRef.delete().then(() => {
+        firebase
+          .auth()
+          .currentUser.delete()
+          .then(() => this.$router.replace("/"));
+      });
     },
     /**
      * @description

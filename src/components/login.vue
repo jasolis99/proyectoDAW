@@ -309,7 +309,7 @@ export default {
 }
 
 .googleico {
-  background-color: white;
+  background-color: #FFF;
 
 }
 label,
