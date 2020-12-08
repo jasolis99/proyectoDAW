@@ -359,7 +359,7 @@ export default {
      */
     deleteaccount() {
       let storageRef = firebase.storage().ref(firebase.auth().currentUser.uid);
-      firebase.database().ref('Logros/'+firebase.auth().currentUser.uid)
+      firebase.database().ref('Logros/'+firebase.auth().currentUser.uid).remove()
       storageRef.delete().then(() => {
         firebase
           .auth()
