@@ -358,14 +358,19 @@ export default {
      * Método que dará de baja al usuario registrado. Una vez finalizado se le devuelve a la pantalla Home.
      */
     deleteaccount() {
-      let storageRef = firebase.storage().ref(firebase.auth().currentUser.uid);
-      firebase.database().ref('Logros/'+firebase.auth().currentUser.uid).remove()
-      storageRef.delete().then(() => {
-        firebase
-          .auth()
-          .currentUser.delete()
-          .then(() => this.$router.replace("/"));
-      });
+      if(firebase.auth().photoURL){
+        
+        let storageRef = firebase.storage().ref(firebase.auth().currentUser.uid);
+        storageRef.delete()
+      }
+      if(firebase.database().ref('Logros/'+firebase.auth().currentUser.uid)){
+
+        firebase.database().ref('Logros/'+firebase.auth().currentUser.uid).remove()
+      }
+      firebase
+        .auth()
+        .currentUser.delete()
+        .then(() => this.$router.replace("/"));
     },
     /**
      * @description
