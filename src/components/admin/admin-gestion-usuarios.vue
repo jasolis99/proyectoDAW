@@ -91,6 +91,17 @@ export default {
         },
         body: JSON.stringify({ uid: uid }),
       });
+
+      if(firebase.storage().ref(uid)){
+        
+        let storageRef = firebase.storage().ref(uid);
+        storageRef.delete()
+      }
+
+      if(firebase.database().ref('Logros/'+ uid)){
+
+        firebase.database().ref('Logros/'+ uid).remove()
+      }
     },
     /**
      * @description
