@@ -10,24 +10,28 @@
         id=""
         v-model="search"
       />
-      <div
-        v-for="(value, key) in filterlessons"
-        :key="key"
-        class="w-2/3 bg-white rounded-md flex justify-between items-center p-3 mt-10"
-      >
-        <p class="w-1/5 text-6xl text-center text-orange-600 numero"> x{{value.Numerotabla}}</p>
-        <p class="w-4/5 p-1 text-sm text-justify">
-          <span class="block text-xl">{{ value.Nombreleccion }}</span>
-          {{ value.Descripcion }}
-        </p>
-        <router-link
-          v-if="auth"
-          :to="'/leccion/' + value.Id"
-          tag="button"
-          class="p-1 text-md text-white bg-green-700 rounded-md"
+      <div id="altura" class="w-2/3 overflow-y-auto">
+        <div
+          v-for="(value, key) in filterlessons"
+          :key="key"
+          class="w-full bg-white rounded-md flex justify-between items-center p-3 mt-10"
         >
-          Comenzar
-        </router-link>
+          <p class="w-1/5 text-6xl text-center text-orange-600 numero">
+            x{{ value.Numerotabla }}
+          </p>
+          <p class="w-4/5 p-1 text-sm text-justify">
+            <span class="block text-xl">{{ value.Nombreleccion }}</span>
+            {{ value.Descripcion }}
+          </p>
+          <router-link
+            v-if="auth && verified"
+            :to="'/leccion/' + value.Id"
+            tag="button"
+            class="p-1 text-md text-white bg-green-700 rounded-md"
+          >
+            Comenzar
+          </router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -47,23 +51,27 @@ export default {
       auth: false,
       show: false,
       name: "",
-      search: '',
+      search: "",
       lessons: [],
+      verified: false
     };
   },
   /**
    * @description
    * Created Home.vue
-   * 
+   *
    * Al crearse la instancia Vue en el componente, comprobamos si el usuario está autenticado o no.
    * Si está autenticado, cargamos en la variable user el objeto devuelto con la información del usuario
-   * autenticado. Obtenemos igualmente estemos autenticados o no el listado de todas lecciones existentes en la 
+   * autenticado. Obtenemos igualmente estemos autenticados o no el listado de todas lecciones existentes en la
    * aplicación
    */
   created() {
     if (firebase.auth().currentUser) {
       this.user = firebase.auth().currentUser;
       this.auth = true;
+      if (this.user.emailVerified) {
+        this.verified = true;
+      }
     }
     this.getlessons();
   },
@@ -131,7 +139,7 @@ export default {
   src: url("../assets/abc3D.ttf");
 }
 
-.numero{
+.numero {
   font-family: "abc";
 }
 p {
@@ -146,6 +154,9 @@ h1 {
   text-transform: uppercase;
 }
 #centro {
-  margin-top: 15%;
+  margin-top: 5%;
+}
+#altura{
+  height: 480px;
 }
 </style>

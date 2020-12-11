@@ -343,7 +343,7 @@ export default {
 
 #centro {
   position: relative;
-  top: 25%;
+  top: 10%;
 }
 
 #blackboard {
