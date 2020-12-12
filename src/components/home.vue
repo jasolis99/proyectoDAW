@@ -9,8 +9,10 @@
         name=""
         id=""
         v-model="search"
+        @keyup="gracias()"
+        @change="gracias()"
       />
-      <div id="altura" class="w-2/3 overflow-y-auto">
+      <div v-if="!thanks" id="altura" class="w-2/3 overflow-y-auto">
         <div
           v-for="(value, key) in filterlessons"
           :key="key"
@@ -33,6 +35,54 @@
           </router-link>
         </div>
       </div>
+      <div v-else>
+        <h1 class="text-white font-bold text-center my-3"> MUCHAS GRACIAS ESCUELA VIRGEN DE GUADALUPE</h1>
+        <div class="flex flex-wrap text-center columna">
+          <p>Gloria de Miguel</p>
+          <p>Pilar de Miguel</p>
+          <p>Antonio Rodríguez Barril</p>
+          <p>Carolina López</p>
+          <p>Lourdes</p>
+          <p>Paquita</p>
+          <p>Padre Jorge</p>
+          <p>Padre Balta</p>
+          <p>Carmen Rodríguez</p>
+          <p>Cristina Manzano</p>
+          <p>Antonio Gordillo</p>
+          <p>Carmen Samino</p>
+          <p>Santi</p>
+          <p>Leticia</p>
+          <p>Parra</p>
+          <p>Francisco Ponce</p>
+          <p>Andrés Retamar</p>
+          <p>Chema Aretio</p>
+          <p>Carolina León</p>
+          <p>Diego Camisón</p>
+          <p>Elia</p>
+          <p>Marisol Fernández</p>
+          <p>Víctor (Profesor de prácticas de tecnología)</p>
+          <p>Manolo Merino</p>
+          <p>Magdalena Pozo</p>
+          <p>Magdalena Sánchez</p>
+          <p>Padre Tomás</p>
+          <p>Isabel Muñoz</p>
+          <p>Francisco García</p>
+          <p>Ángel Galán</p>
+          <p>Ernesto González</p>
+          <p>José Ramón</p>
+          <p>Miguel Jaque</p>
+        </div>
+        <h1 class="text-white font-bold text-center my-5">GRACIAS AMIGOS</h1>
+        <div class="flex flex-wrap text-center columna">
+          <p>Franciso Javier Sánchez Campanón</p>
+          <p>Ángel Cabrera Guillén</p>
+          <p>Andrea Godoy Gago (Prima y compañera)</p>
+          <p>Pablo Trigo de la Piedad</p>
+          <p>Jesús Morales Rodríguez</p>
+          <p>David Nogales</p>
+        </div>
+        <h1 class="text-white font-bold text-center my-2">GRACIAS BORJA</h1>
+      </div>
     </div>
   </div>
 </template>
@@ -53,7 +103,8 @@ export default {
       name: "",
       search: "",
       lessons: [],
-      verified: false
+      verified: false,
+      thanks: false
     };
   },
   /**
@@ -124,6 +175,11 @@ export default {
     logout() {
       firebase.auth().signOut();
     },
+    gracias(){
+      if(this.search == "GRACIAS"){
+        this.thanks = true
+      }
+    }
   },
 };
 </script>
@@ -158,5 +214,9 @@ h1 {
 }
 #altura{
   height: 480px;
+}
+.columna>p{
+  width: 33%;
+  color: white
 }
 </style>

@@ -37,7 +37,6 @@
 <script>
 import firebase from "firebase";
 export default {
-
   data() {
     return {
       users: null,
@@ -66,7 +65,7 @@ export default {
   methods: {
     /**
      * @description
-     * Obtiene los usuarios registrados en la plataforma. 
+     * Obtiene los usuarios registrados en la plataforma.
      * Conecta con nuestro servidor node.js y obtiene los datos
      */
     async getusers() {
@@ -78,11 +77,22 @@ export default {
     /**
      * @description
      * Método para dar de baja a un usuario. Conecta con nuestro servirdor node.js
-     * y éste eliminará el usuario con el uid indicado. 
+     * y éste eliminará el usuario con el uid indicado.
      * @param {array} uid
      * Array con los datos del usuario.
      */
     deleteaccount(uid) {
+      if (firebase.storage().ref(uid)) {
+        let storageRef = firebase.storage().ref(uid);
+        storageRef.delete();
+      }
+
+      if (firebase.database().ref("Logros/" + uid)) {
+        firebase
+          .database()
+          .ref("Logros/" + uid)
+          .remove();
+      }
       fetch("https://bakend-daw-project.herokuapp.com/deleteuser", {
         method: "post",
         headers: {
@@ -91,17 +101,6 @@ export default {
         },
         body: JSON.stringify({ uid: uid }),
       });
-
-      if(firebase.storage().ref(uid)){
-        
-        let storageRef = firebase.storage().ref(uid);
-        storageRef.delete()
-      }
-
-      if(firebase.database().ref('Logros/'+ uid)){
-
-        firebase.database().ref('Logros/'+ uid).remove()
-      }
     },
     /**
      * @description
