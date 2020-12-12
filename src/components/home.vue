@@ -71,8 +71,11 @@
           <p>Ernesto González</p>
           <p>José Ramón</p>
           <p>Miguel Jaque</p>
+          <p>Vicente Calvo</p>
+          <p>Diario HOY</p>
+          <p>Azulae</p>
         </div>
-        <h1 class="text-white font-bold text-center my-5">GRACIAS AMIGOS</h1>
+        <h1 class="text-white font-bold text-center my-2">GRACIAS AMIGOS</h1>
         <div class="flex flex-wrap text-center columna">
           <p>Franciso Javier Sánchez Campanón</p>
           <p>Ángel Cabrera Guillén</p>
