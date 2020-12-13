@@ -37,9 +37,9 @@
         </div>
       </div>
       <div v-else>
-        <!-- <audio autoplay>
+        <audio autoplay>
           <source src="../assets/esoquetumedas.mp3" type="audio/mpeg">
-        </audio> -->
+        </audio>
         <h1 @click="{thanks = false; search = ''}" class="text-white font-bold text-center my-3"> MUCHAS GRACIAS ESCUELA VIRGEN DE GUADALUPE</h1>
         <div class="flex flex-wrap text-center columna">
           <p onclick="alert('Por ser la primera.Por tu manera de enseñar y cariño a tus alumnos.')">Gloria de Miguel</p>

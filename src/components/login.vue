@@ -134,6 +134,7 @@
           >Inicia sesión</router-link>
       </p>
     </form>
+
   </div>
 </template>
 
@@ -321,6 +322,6 @@ input {
 
 #centro {
   position: relative;
-  top: 5%;
+  top: 15%;
 }
 </style>
