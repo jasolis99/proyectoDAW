@@ -27,8 +27,7 @@ export default {
    */
   created() {
     if (firebase.auth().currentUser.uid != "j2ZZ3o5HWMYawkUIkjMVPoiNngJ3") {
-      // this.$router.replace('/')
-      console.log("No eres admin");
+      this.$router.replace('/')
     }
   },
 };
