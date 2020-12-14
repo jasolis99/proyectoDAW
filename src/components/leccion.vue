@@ -8,12 +8,14 @@
         <div v-if="!end" class="flex justify-center my-40">
           <button
             @click="startall()"
-            class="p-5 bg-blue-200 rounded text-3xl"
+            class="text-white text-6xl border border-white rounded p-1"
             v-if="!start"
           >
             Comenzar
           </button>
-          <p v-else class="text-white text-6xl" v-text="tabla"></p>
+          <div v-else>
+            <p class="text-white text-6xl" v-text="tabla"></p>
+          </div>
         </div>
         <div v-else class="flex justify-center text-white">
           <table class="text-2xl">
@@ -44,19 +46,27 @@
           </table>
         </div>
       </div>
-      <div v-if="startbuttons" class="flex justify-around">
+      <div v-if="startbuttons" class="flex justify-around my-5">
         <button
+          v-if="!end"
           class="text-white text-xl border border-white rounded p-1"
           @click="startlesson()"
         >
           SEGUIR
         </button>
-        <button class="text-white text-xl border border-white rounded p-1" @click ="reset()">
+        <button
+          v-if="!end"
+          class="text-white text-xl border border-white rounded p-1"
+          @click="reset()"
+        >
           Reintentar desde el principio
         </button>
       </div>
       <div v-if="end" class="flex justify-center">
-        <button @click="endlesson()" class="text-white text-xl border border-white rounded p-1">
+        <button
+          @click="endlesson()"
+          class="text-white text-xl border border-white rounded p-1"
+        >
           Finalizar
         </button>
       </div>
@@ -95,17 +105,18 @@ export default {
   },
   /**
    * @description
-   * 
+   *
    * Mounted componente leccion.vue
-   * 
-   * Cuando la instancia Vue es montada configura todo lo necesario para poder 
+   *
+   * Cuando la instancia Vue es montada configura todo lo necesario para poder
    * ejecutar el speech recognition.
    */
   mounted() {
     recognition.maxAlternatives = 1;
     recognition.interimResults = false;
 
-    recognition.addEventListener("speechstart", () => {});
+    recognition.addEventListener("speechstart", () => {
+    });
 
     recognition.addEventListener("speechend", () => {
       recognition.stop();
@@ -113,10 +124,11 @@ export default {
 
     recognition.addEventListener("result", (e) => {
       console.log(e);
+      this.code = "result";
       let last = e.results.length - 1;
       let text = e.results[last][0].transcript;
-      if(text == "una"){
-        text = "uno"
+      if (text == "una") {
+        text = "uno";
       }
       this.respuesta = text;
       console.log(this.respuesta);
@@ -131,10 +143,10 @@ export default {
   methods: {
     /**
      * @description
-     * En este método se crea un array que almacena el nombre del número y el número perteneciente 
-     * nada más montarse la instancia Vue. 
+     * En este método se crea un array que almacena el nombre del número y el número perteneciente
+     * nada más montarse la instancia Vue.
      * Esto se crea debido a que el speech recognition no reconoce como número los comprendidos entre 1 y 8. Lo
-     * reconoce como una string de su nombre. 
+     * reconoce como una string de su nombre.
      * Cuando mencionamos un número de estos en cualquier lección lo transforma de nombre a número comprobándolo
      * en el array creado para poder comprobar dicho número mencionado en el speech.
      */
@@ -154,7 +166,7 @@ export default {
      * Este método oculta el botón de comenzar lección y da lugar al comienzo de la lección con una cuenta atrás.
      */
     startall() {
-      this.startbuttons = true
+      this.startbuttons = true;
       this.start = !this.start;
       this.countdown();
     },
@@ -197,7 +209,7 @@ export default {
     },
     /**
      * @description
-     * Método que comprueba la respuesta del usuario a la multiplicación. Una vez comprobado muestra 
+     * Método que comprueba la respuesta del usuario a la multiplicación. Una vez comprobado muestra
      * un mensaje en pantalla indicando el resultado dicho por voz.
      */
     guess() {
@@ -247,7 +259,7 @@ export default {
     },
     /**
      * @description
-     * Método ejecutado una vez se monta la instancia Vue. Obtiene de la base de datos la lección que desea 
+     * Método ejecutado una vez se monta la instancia Vue. Obtiene de la base de datos la lección que desea
      * el usuario realizar.
      */
     getlessons() {
@@ -285,13 +297,13 @@ export default {
         .set({
           Nombreleccion: this.lessons.Nombreleccion,
           Resultado: resultado,
-          Respuestas: this.results
+          Respuestas: this.results,
         })
         .then((this.end = true));
     },
     /**
      * @description
-     * Método empleado para reiniciar la lección en caso deseado. Reinicia todas las variables a su estado inicial. 
+     * Método empleado para reiniciar la lección en caso deseado. Reinicia todas las variables a su estado inicial.
      * De esta manera se evita recargar el componente.
      */
     reset() {
@@ -308,14 +320,14 @@ export default {
         results: [],
         end: false,
       };
-      Object.assign(this.$data, data)
+      Object.assign(this.$data, data);
     },
     /**
      * @description
      * Método que nos devuelve a la pantalla de Home una vez finalizada la lección
      */
-    endlesson(){
-      this.$router.replace("/")
+    endlesson() {
+      this.$router.replace("/");
     },
     /**
      * @description
@@ -343,7 +355,7 @@ export default {
 
 #centro {
   position: relative;
-  top: 10%;
+  top: 10%
 }
 
 #blackboard {

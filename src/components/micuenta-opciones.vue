@@ -349,8 +349,10 @@ export default {
       this.datauser.updateEmail(this.email).then(() => {
         this.okmail = !this.okmail;
         setTimeout(() => {
-          this.reset();
-        }, 5000);
+          this.currentmail = firebase.auth().currentUser.email
+          this.okmail = false
+          this.change = false
+        }, 1000);
       });
     },
     /**

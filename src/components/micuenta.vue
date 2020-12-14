@@ -29,7 +29,7 @@ export default {
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,regular,italic,600,600italic,700,700italic,800,800italic);
 #centro {
   position: relative;
-  top: 25%;
+  top: 10%;
 }
 h1,
 a {

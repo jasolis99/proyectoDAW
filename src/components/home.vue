@@ -27,7 +27,7 @@
             {{ value.Descripcion }}
           </p>
           <router-link
-            v-if="auth && verified"
+            v-if="auth"
             :to="'/leccion/' + value.Id"
             tag="button"
             class="p-1 text-md text-white bg-green-700 rounded-md"
@@ -40,61 +40,62 @@
         <audio autoplay>
           <source src="../assets/esoquetumedas.mp3" type="audio/mpeg">
         </audio>
-        <h1 @click="{thanks = false; search = ''}" class="text-white font-bold text-center my-3"> MUCHAS GRACIAS ESCUELA VIRGEN DE GUADALUPE</h1>
+        <h1 @click="{thanks = false; search = ''}" class="text-white font-bold text-center"> MUCHAS GRACIAS ESCUELA VIRGEN DE GUADALUPE</h1>
         <div class="flex flex-wrap text-center columna">
-          <p onclick="alert('Por ser la primera.Por tu manera de enseñar y cariño a tus alumnos.')">Gloria de Miguel</p>
-          <p onclick="alert('Os lo debo todo a Gloria y a ti. Mi primera profesora de inglés. Todo empezó con vosotras. Vuestra forma de ser y amor a esta profesión os hace ser únicas.Os tengo un gran aprecio. Os llevaré siempre conmigo en mis recuerdos.')">Pilar de Miguel</p>
-          <p onclick="alert('Por ayudarme a superar cada escalón que no podía subir y confiar en que lo podía hacer.')">Antonio Rodríguez Barril</p>
-          <p onclick="alert('Por ser uno de los pilares de mi educación. Cuatro estupendos años aprendiendo de tí.')">Carolina López</p>
-          <p onclick="alert('Por ser única en el mundo. Adoraba tus clases de matemáticas. Descansa en Paz.')">Lourdes</p>
+          <p>Gloria de Miguel</p>
+          <p>Pilar de Miguel</p>
+          <p>Antonio Rodríguez Barril</p>
+          <p>Carolina López</p>
+          <p>Lourdes</p>
           <p>Paquita</p>
           <p>Padre Jorge</p>
-          <p onclick="alert('Por tu manera de enseñar la religión.')">Padre Balta</p>
-          <p onclick="alert('Por sacar lo mejor de mi.')">Carmen Rodríguez</p>
+          <p>Padre Balta</p>
+          <p>Carmen Rodríguez</p>
           <p>Cristina Manzano</p>
-          <p onclick="alert('Por tu forma de ser y filosofía.')">Padre Antolín</p>
+          <p>Padre Antolín</p>
           <p>Antonio Gordillo</p>
           <p>Carmen Samino</p>
           <p>Santi</p>
           <p>Leticia</p>
-          <p onclick="alert('Por el amor a tu profesión y tu forma de transmitirla.')">Parra</p>
-          <p onclick="alert('Por tu simpatía.')">Francisco Ponce</p>
+          <p>Parra</p>
+          <p>Francisco Ponce</p>
           <p>Andrés Retamar</p>
-          <p onclick="alert('Por creer en mi.')">Chema Aretio</p>
+          <p>Chema Aretio</p>
           <p>Carolina León</p>
-          <p onclick="alert('Por el buen ambiente que generas en clase.')">Diego Camisón</p>
-          <p onclick="alert('Por hacerme adorar la música y la cultura clásica.')">Elia</p>
-          <p onclick="alert('Por hacerme saber que llegaría muy lejos. Así ha sido.')">Marisol Fernández</p>
-          <p onclick="alert('Por tu manera de valorar a la clase.')">Víctor (Profesor de prácticas de tecnología)</p>
-          <p onclick="alert('Por tu respeto y seriedad.')">Manolo Merino</p>
-          <p onclick="alert('Por ser la mejor en lo que hace. Nunca fallas en tus decisiones. Ya sabes a qué me refiero.')">Magdalena Pozo</p>
-          <p onclick="alert('Por estar ahí cuando hacía falta.')">Magdalena Sánchez</p>
+          <p>Diego Camisón</p>
+          <p>Diego Picarzo</p>
+          <p>Elia</p>
+          <p>Marisol Fernández</p>
+          <p>Víctor (Profesor de prácticas de tecnología)</p>
+          <p>Manolo Merino</p>
+          <p>Magdalena Pozo</p>
+          <p>Magdalena Sánchez</p>
           <p>Padre Tomás</p>
           <p>Isabel Muñoz</p>
           <p>Francisco García</p>
-          <p onclick="alert('Por tu gran carisma que hace de ti ser lo mejor que ha tenido esta escuela.')">Ángel Galán</p>
-          <p onclick="alert('Por toda la energía positiva que transmites.')">Ernesto González</p>
+          <p>Ángel Galán</p>
+          <p>Ernesto González</p>
           <p>José Ramón</p>
-          <p onclick="alert('Por entrar en esta escuela. Por guiarme en mi proyecto. Te deseo todo lo mejor.')">Miguel Jaque</p>
-          <p onclick="alert('Por traerme de vuelta a casa.')">Antonia Meléndez (Directora de la escuela)</p>
+          <p>Miguel Jaque</p>
+          <p>Antonia Meléndez (Directora de la escuela)</p>
           <p>Juan Donoso (Jefe de estudios)</p>
-          <p onclick="alert('Por vuestra labor en esta escuela. Sois únicos.')">Personal de mantenimiento</p>
-          <p onclick="alert('Por ser el mejor conserje que ha tenido esta escuela.')">Manolo (Antiguo conserje de la escuela)</p>
-          <p onclick="alert('Por ser el mejor tutor de empresa que uno puede tener.')">Vicente Calvo</p>
-          <p onclick="alert('Por hacerme sentir como en casa.')">Diario HOY</p>
-          <p onclick="alert('Por muchos años que nos queden.')">Azulae</p>
+          <p>Personal de mantenimiento</p>
+          <p>Manolo (Antiguo conserje de la escuela)</p>
+          <p>Vicente Calvo</p>
+          <p>Diario HOY</p>
+          <p>Azulae</p>
         </div>
         <h1 class="text-white font-bold text-center my-2">GRACIAS AMIGOS</h1>
         <div class="flex flex-wrap text-center columna">
-          <p onclick="alert('Por estos 15 años amigo. El primer amigo de mi vida. Gracias por todos los momentos vividos.')">Franciso Javier Sánchez Campanón</p>
-          <p onclick="alert('Por tu amistad. Por entenderme. Por tu personalidad.Por todos los momentos y los que quedan.')">Ángel Cabrera Guillén</p>
-          <p onclick="alert('Por ser la mejor prima que uno puede tener. He tenido mucha suerte de coincidir contigo en clase.')">Andrea Godoy Gago (Prima y compañera)</p>
-          <p onclick="alert('Por esos 5 años juntos. Ha sido un placer conocerte. Por muchos años más compañero.')">Pablo Trigo de la Piedad</p>
-          <p onclick="alert('Por tu persona. Por tu amistad. Por ser tú. Muchas gracias amigos por todos los momentos vividos y risas.')">Jesús Morales Rodríguez</p>
-          <p onclick="alert('Por todos esos grandes momentos. Solo fue un año, pero un año grande.')">David Nogales</p>
+          <p>Franciso Javier Sánchez Campanón</p>
+          <p>Ángel Cabrera Guillén</p>
+          <p>Andrea Godoy Gago (Prima y compañera)</p>
+          <p>Pablo Trigo de la Piedad</p>
+          <p>Jesús Morales Rodríguez</p>
+          <p>David Nogales</p>
         </div>
-        <h1 onclick="alert('Por ser el mejor primo que uno puede tener. Muchas gracias por tu cariño. Eres un hermano para mí. Gracias por ayuda y por hacerme adorar esta profesión.')" class="text-white font-bold text-center">GRACIAS BORJA</h1>
-        <h1 onclick="alert('Por ser los mejores abuelos del mundo. Mis segundos padres. Que alegría pasar casi toda mi vida con vosotros. Descansad.')" class="text-white font-bold text-center"> DEDICADO A JOSÉ Y PURIFICACIÓN</h1>
+        <h1 class="text-white font-bold text-center">GRACIAS BORJA</h1>
+        <h1 class="text-white font-bold text-center"> DEDICADO A JOSÉ Y PURIFICACIÓN</h1>
       </div>
     </div>
   </div>

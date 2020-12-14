@@ -26,18 +26,19 @@
         </tr>
       </table>
     </div>
-    <div
-      v-else
-      v-for="(value, key) in achievements"
-      :key="key"
-      class="flex justify-between my-2 p-1 border border-solid border-black rounded-md"
-    >
-      <h4 class="p-1">{{ value.Nombreleccion }}</h4>
-      <div class="flex justify-around w-3/6">
-        <p class="p-1">{{ value.Resultado }}</p>
-        <button @click="seeresults(key)" class="p-1 bg-green-300 rounded">
-          Resultados
-        </button>
+    <div v-else class=" my-2 h-64 overflow-y-auto">
+      <div
+        v-for="(value, key) in achievements"
+        :key="key"
+        class="flex justify-between my-2 p-1 border border-solid border-black rounded-md"
+      >
+        <h4 class="p-1">{{ value.Nombreleccion }}</h4>
+        <div class="flex justify-around w-3/6">
+          <p class="p-1">{{ value.Resultado }}</p>
+          <button @click="seeresults(key)" class="p-1 bg-green-300 rounded">
+            Resultados
+          </button>
+        </div>
       </div>
     </div>
   </div>

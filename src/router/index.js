@@ -88,7 +88,7 @@ router.beforeEach((to, from, next) => {
   next();
 
   if(auth && !user){
-    next('Login')
+    next('/login')
   }
   else if (!auth && user){
     next('/')

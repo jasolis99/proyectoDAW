@@ -36,6 +36,7 @@
         v-model="mail"
         required
       />
+      <pre>{{mail}}</pre>
       <label for="pass">Contraseña</label>
       <input
         class="bg-gray-400 rounded px-2 py-2"
@@ -44,6 +45,7 @@
         v-model="password"
         required
       />
+      <pre>{{password}}</pre>
       <div v-if="errormessage">
         <p v-text="errormessage" class="text-center text-red-600" />
       </div>
@@ -88,6 +90,7 @@
         v-model="displayName"
         required
       />
+      <pre>{{displayName}}</pre>
       <label for="email">Email</label>
       <input
         class="bg-gray-400 rounded px-2 py-2"
@@ -96,6 +99,7 @@
         v-model="mail"
         required
       />
+      <pre>{{mail}}</pre>
       <label for="pass">Contraseña</label>
       <input
         class="bg-gray-400 rounded px-2 py-2"
@@ -322,6 +326,6 @@ input {
 
 #centro {
   position: relative;
-  top: 15%;
+  top: 5%
 }
 </style>

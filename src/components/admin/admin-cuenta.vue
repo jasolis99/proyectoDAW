@@ -26,7 +26,7 @@ export default {
    * Comprueba si el usuario es administrador. Si no es, se le devuelve a la pantalla inicial.
    */
   created() {
-    if (firebase.auth().currentUser.uid != "j2ZZ3o5HWMYawkUIkjMVPoiNngJ3") {
+    if (firebase.auth().currentUser.uid != "OLFAphmItiSeKVn4u0eENc0WhKd2") {
       this.$router.replace('/')
     }
   },
@@ -45,6 +45,6 @@ p {
 }
 #centro {
   position: relative;
-  top: 25%;
+  top: 10%;
 }
 </style>

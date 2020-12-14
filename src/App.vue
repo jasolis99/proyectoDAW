@@ -102,7 +102,7 @@ export default {
       this.auth = true;
       this.user = firebase.auth().currentUser;
       if (!this.user.photoURL) {
-        this.name = this.user.email.charAt(0);
+        this.name = this.user.displayName.charAt(0);
       }
       if (this.user.emailVerified) {
         this.verified = true;
