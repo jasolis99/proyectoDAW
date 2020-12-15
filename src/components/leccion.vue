@@ -190,7 +190,7 @@ export default {
      * sube a la base de datos.
      */
     startlesson() {
-      if (this.mult <= 3) {
+      if (this.mult <= 10) {
         this.tabla = this.lessons.Numerotabla + " x " + this.mult;
         this.startSpeak();
       } else {
